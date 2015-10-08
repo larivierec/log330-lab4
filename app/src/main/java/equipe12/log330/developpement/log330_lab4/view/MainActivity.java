@@ -1,9 +1,11 @@
-package equipe12.log330.developpement.log330_lab4;
+package equipe12.log330.developpement.log330_lab4.view;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import equipe12.log330.developpement.log330_lab4.R;
 
 public class MainActivity extends Activity {
 
