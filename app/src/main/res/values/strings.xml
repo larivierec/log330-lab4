@@ -7,6 +7,12 @@
     <string name="lbl_btn_add_to_list">Add GPS</string>
     <string name="lbl_btn_remove_from_list">Remove Selected GPS</string>
 
+    <string name="lbl_gps_name">GPS Name:</string>
+    <string name="lbl_gps_id">GPS ID:</string>
+    <string name="lbl_gps_type">GPS Type:</string>
+
+    <string name="add_gps_message_dialog">Enter the following fields to add a GPS.</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

@@ -1,18 +1,36 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import equipe12.log330.developpement.log330_lab4.R;
+import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
 
-public class MainActivity extends Activity {
+/**
+ * Uses the DialogGPSAccepted interface to add a new entity to the list
+ */
+
+public class MainActivity extends Activity implements DialogGPSAccepted{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
+        gpsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DialogGPS.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -34,5 +52,12 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDialogButtonAdded(String gpsName, String gpsID, String gpsType) {
+        if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty() && !gpsType.trim().isEmpty()){
+
+        }
     }
 }
