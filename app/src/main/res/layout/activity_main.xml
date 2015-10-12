@@ -15,7 +15,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="401dp"
-            android:id="@+id/listView" />
+            android:id="@+id/lst_avail_gps" />
 
         <LinearLayout
             android:orientation="horizontal"

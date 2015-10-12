@@ -6,6 +6,15 @@ package equipe12.log330.developpement.log330_lab4.model;
 public abstract class GPSInfo {
     private Integer mGPSID;
     private String mGPSName;
+    private String mGPSType;
+
+    public String getmGPSType() {
+        return mGPSType;
+    }
+
+    public void setmGPSType(String mGPSType) {
+        this.mGPSType = mGPSType;
+    }
 
     protected Integer getmGPSID() {
         return mGPSID;

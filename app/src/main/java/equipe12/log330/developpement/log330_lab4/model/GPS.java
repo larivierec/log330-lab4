@@ -5,9 +5,10 @@ package equipe12.log330.developpement.log330_lab4.model;
  */
 public class GPS extends GPSInfo {
 
-    public GPS(int id, String name){
+    public GPS(int id, String name, String type){
         super.setmGPSID(id);
         super.setmGPSName(name);
+        super.setmGPSType(type);
     }
 
 

@@ -1,35 +1,79 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import java.util.LinkedList;
 
 import equipe12.log330.developpement.log330_lab4.R;
 import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
+import equipe12.log330.developpement.log330_lab4.model.GPS;
 
 /**
  * Uses the DialogGPSAccepted interface to add a new entity to the list
  */
 
-public class MainActivity extends Activity implements DialogGPSAccepted{
+public class MainActivity extends Activity implements DialogGPSAccepted {
+
+    final private Context mContext = this;
+    private LinkedList<GPS> mGPSList = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DialogGPS.class);
-                startActivity(intent);
+                final Dialog gps_data_dialog = new Dialog(mContext);
+                gps_data_dialog.setContentView(R.layout.dialog_gps_layout);
+                gps_data_dialog.setTitle("Add a GPS");
+
+                final Button dialogAdd = (Button) gps_data_dialog.findViewById(R.id.btn_add_gps_data);
+                final Button dialogCancel = (Button) gps_data_dialog.findViewById(R.id.btn_cancel_gps_data);
+
+                final EditText view_gpsname = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_name);
+                final EditText view_gpsid = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_id);
+                final EditText view_gpstype = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_type);
+
+
+                dialogAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String gpsname = view_gpsname.getText().toString();
+                        String gpsid = view_gpsid.getText().toString();
+                        String gpstype = view_gpstype.getText().toString();
+
+                        MainActivity.this.onDialogButtonAdded(gpsname, gpsid, gpstype);
+                        gps_data_dialog.dismiss();
+                    }
+                });
+
+                dialogCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gps_data_dialog.cancel();
+                    }
+                });
+                gps_data_dialog.show();
             }
         });
+
+        final ListView gpsDataLV = (ListView) findViewById(R.id.lst_avail_gps);
 
     }
 
@@ -39,6 +83,7 @@ public class MainActivity extends Activity implements DialogGPSAccepted{
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -57,7 +102,7 @@ public class MainActivity extends Activity implements DialogGPSAccepted{
     @Override
     public void onDialogButtonAdded(String gpsName, String gpsID, String gpsType) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty() && !gpsType.trim().isEmpty()){
-
+            mGPSList.push(new GPS(Integer.parseInt(gpsID), gpsName, gpsType));
         }
     }
 }

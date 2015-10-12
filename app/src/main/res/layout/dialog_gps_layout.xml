@@ -27,7 +27,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_gps_name"
                 android:layout_weight="0.62"
-                android:gravity="left" />
+                android:gravity="left"
+                android:enabled="true"
+                android:inputType="text" />
         </LinearLayout>
 
         <LinearLayout
@@ -49,13 +51,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_gps_id"
                 android:layout_weight="0.12"
-                android:gravity="left" />
+                android:gravity="left"
+                android:enabled="true" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,7 +74,31 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_gps_type"
                 android:layout_weight="0.18"
-                android:gravity="left" />
+                android:gravity="left"
+                android:enabled="true"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_message"
+                android:id="@+id/btn_add_gps_data"
+                android:gravity="start" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_message"
+                android:id="@+id/btn_cancel_gps_data"
+                android:gravity="end" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

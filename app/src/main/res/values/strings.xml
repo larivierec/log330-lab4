@@ -12,6 +12,8 @@
     <string name="lbl_gps_type">GPS Type:</string>
 
     <string name="add_gps_message_dialog">Enter the following fields to add a GPS.</string>
+    <string name="add_message">Add</string>
+    <string name="cancel_message">Cancel</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

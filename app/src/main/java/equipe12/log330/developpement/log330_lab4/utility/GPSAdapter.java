@@ -1,30 +1,33 @@
 package equipe12.log330.developpement.log330_lab4.utility;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 
-import equipe12.log330.developpement.log330_lab4.view.MainActivity;
+import java.util.List;
+
+import equipe12.log330.developpement.log330_lab4.model.GPS;
 
 /**
  * Created by Chris on 10/7/2015.
  */
-public class GPSAdapter extends BaseAdapter {
-    private String[] mGPSNames;
+public class GPSAdapter extends ArrayAdapter<GPS> {
 
-    // TODO see this link for custom list view adapter https://www.caveofprogramming.com/guest-posts/custom-listview-with-imageview-and-textview-in-android.html
-    public GPSAdapter(MainActivity theActivity){
+    //TODO custom listviewe: http://www.androidhive.info/2012/02/android-custom-listview-with-image-and-text/
 
+    public GPSAdapter(Context context, int textViewResourceId) {
+        super(context, textViewResourceId);
+    }
+
+    public GPSAdapter(Context context, int resource, List<GPS> items) {
+        super(context, resource, items);
     }
 
     @Override
     public int getCount() {
         return 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
     }
 
     @Override
@@ -34,6 +37,9 @@ public class GPSAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View v = convertView;
+
+
         return null;
     }
 }
