@@ -5,20 +5,20 @@
     android:gravity="center_horizontal">
 
     <Button
-        android:layout_width="202dp"
+        android:layout_width="222dp"
         android:layout_height="wrap_content"
         android:text="@string/open_map_view"
         android:id="@+id/btn_open_maps_view"
         android:singleLine="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="222dp"
         android:layout_height="wrap_content"
         android:text="@string/lbl_btn_remove_from_list"
         android:id="@+id/btn_delete_gps" />
 
     <Button
-        android:layout_width="205dp"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:text="@string/cancel_message"
         android:id="@+id/btn_gps_info_cancel"

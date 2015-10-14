@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import equipe12.log330.developpement.log330_lab4.R;
 import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
 import equipe12.log330.developpement.log330_lab4.model.GPS;
+import equipe12.log330.developpement.log330_lab4.model.GPSCoordinates;
 import equipe12.log330.developpement.log330_lab4.utility.GPSAdapter;
 
 /**
@@ -29,11 +30,14 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
     final private Context mContext = this;
     private GPSAdapter mGPSAdapter;
     private LinkedList<GPS> mGPSList = new LinkedList<>();
+    private LinkedList<GPSCoordinates> mCoords = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //create dummy coordinates
 
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
