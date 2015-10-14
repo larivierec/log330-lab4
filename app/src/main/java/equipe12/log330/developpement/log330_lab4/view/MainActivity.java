@@ -1,15 +1,14 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -19,6 +18,7 @@ import java.util.LinkedList;
 import equipe12.log330.developpement.log330_lab4.R;
 import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
 import equipe12.log330.developpement.log330_lab4.model.GPS;
+import equipe12.log330.developpement.log330_lab4.utility.GPSAdapter;
 
 /**
  * Uses the DialogGPSAccepted interface to add a new entity to the list
@@ -27,6 +27,7 @@ import equipe12.log330.developpement.log330_lab4.model.GPS;
 public class MainActivity extends Activity implements DialogGPSAccepted {
 
     final private Context mContext = this;
+    private GPSAdapter mGPSAdapter;
     private LinkedList<GPS> mGPSList = new LinkedList<>();
 
     @Override
@@ -74,6 +75,32 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
         });
 
         final ListView gpsDataLV = (ListView) findViewById(R.id.lst_avail_gps);
+        mGPSAdapter = new GPSAdapter(this,mGPSList);
+        gpsDataLV.setAdapter(mGPSAdapter);
+
+        gpsDataLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Dialog gps_info_dialog = new Dialog(mContext);
+                gps_info_dialog.setTitle("GPS Commands");
+                final Button gps_remove = (Button) gps_info_dialog.findViewById(R.id.btn_delete_gps);
+                final Button map_mode = (Button) gps_info_dialog.findViewById(R.id.btn_open_maps_view);
+
+                gps_remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
+                map_mode.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+            }
+        });
 
     }
 
@@ -99,10 +126,13 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onDialogButtonAdded(String gpsName, String gpsID, String gpsType) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty() && !gpsType.trim().isEmpty()){
             mGPSList.push(new GPS(Integer.parseInt(gpsID), gpsName, gpsType));
+            mGPSAdapter.notifyDataSetChanged();
         }
     }
 }

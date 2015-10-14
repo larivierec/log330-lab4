@@ -12,11 +12,11 @@ public abstract class GPSInfo {
         return mGPSType;
     }
 
-    public void setmGPSType(String mGPSType) {
+    protected void setmGPSType(String mGPSType) {
         this.mGPSType = mGPSType;
     }
 
-    protected Integer getmGPSID() {
+    public Integer getmGPSID() {
         return mGPSID;
     }
 
@@ -24,7 +24,7 @@ public abstract class GPSInfo {
         this.mGPSID = mGPSID;
     }
 
-    protected String getmGPSName() {
+    public String getmGPSName() {
         return mGPSName;
     }
 

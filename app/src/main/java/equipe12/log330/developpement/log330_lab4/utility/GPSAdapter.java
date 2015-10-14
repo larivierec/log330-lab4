@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.List;
 
+import java.util.LinkedList;
+
+import equipe12.log330.developpement.log330_lab4.R;
 import equipe12.log330.developpement.log330_lab4.model.GPS;
 
 /**
@@ -15,31 +19,44 @@ import equipe12.log330.developpement.log330_lab4.model.GPS;
  */
 public class GPSAdapter extends ArrayAdapter<GPS> {
 
-    //TODO custom listviewe: http://www.androidhive.info/2012/02/android-custom-listview-with-image-and-text/
+    private LinkedList<GPS> mGPSItems;
 
-    public GPSAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
+    public GPSAdapter(Context ctx, LinkedList<GPS> items){
+        super(ctx, R.layout.gps_listview_layout,items);
+        this.mGPSItems = items;
     }
 
-    public GPSAdapter(Context context, int resource, List<GPS> items) {
+    public GPSAdapter(Context context, int resource, LinkedList<GPS> items) {
         super(context, resource, items);
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
+        this.mGPSItems = items;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
+        View row = convertView;
+        GPSViewHolder vh = null;
 
+        if(row == null){
+            LayoutInflater gpsInflater = LayoutInflater.from(getContext());
+            row = gpsInflater.inflate(R.layout.gps_listview_layout, parent, false);
+            vh = new GPSViewHolder(row);
+            row.setTag(vh);
+        }else{
+            vh = (GPSViewHolder) row.getTag();
+        }
 
-        return null;
+        vh.theText.setText(mGPSItems.get(position).getmGPSName());
+
+        return row;
+    }
+
+    class GPSViewHolder{
+        TextView theText;
+        ImageView theImage;
+
+        public GPSViewHolder(View v) {
+            theText = (TextView) v.findViewById(R.id.txt_gps_name_row);
+            theImage = (ImageView) v.findViewById(R.id.lv_gps_image_row);
+        }
     }
 }
