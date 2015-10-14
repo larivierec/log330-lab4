@@ -80,16 +80,20 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
 
         gpsDataLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 final Dialog gps_info_dialog = new Dialog(mContext);
+                gps_info_dialog.setContentView(R.layout.lv_command_dialog);
                 gps_info_dialog.setTitle("GPS Commands");
                 final Button gps_remove = (Button) gps_info_dialog.findViewById(R.id.btn_delete_gps);
                 final Button map_mode = (Button) gps_info_dialog.findViewById(R.id.btn_open_maps_view);
+                final Button btn_cancel = (Button) gps_info_dialog.findViewById(R.id.btn_gps_info_cancel);
 
                 gps_remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        mGPSList.remove(position);
+                        mGPSAdapter.notifyDataSetChanged();
+                        gps_info_dialog.dismiss();
                     }
                 });
 
@@ -99,6 +103,15 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
 
                     }
                 });
+
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gps_info_dialog.cancel();
+                    }
+                });
+
+                gps_info_dialog.show();
             }
         });
 

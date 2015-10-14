@@ -17,4 +17,11 @@
         android:text="@string/lbl_btn_remove_from_list"
         android:id="@+id/btn_delete_gps" />
 
+    <Button
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_message"
+        android:id="@+id/btn_gps_info_cancel"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
