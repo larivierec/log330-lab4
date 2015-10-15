@@ -6,11 +6,16 @@ import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.LinkedList;
 
@@ -19,15 +24,17 @@ import equipe12.log330.developpement.log330_lab4.R;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private LinkedList<LatLng> hardCodedList = new LinkedList<>();
+    private GoogleMapOptions mMapOptions = new GoogleMapOptions();
+    private LinkedList<LatLng> mHardCodedList = new LinkedList<>();
+    private LinkedList<LatLng> mUserSelections = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        hardCodedList.push(new LatLng(45.501689, -73.567256 )); //ets
-        hardCodedList.push(new LatLng(55.00,-115)); //alberta
+        mHardCodedList.push(new LatLng(45.501689, -73.567256)); //ets
+        mHardCodedList.push(new LatLng(55.00, -115)); //alberta
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -48,11 +55,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL)
+                .compassEnabled(true)
+                .rotateGesturesEnabled(true)
+                .tiltGesturesEnabled(true)
+                .zoomControlsEnabled(true)
+                .zoomGesturesEnabled(true)
+                .mapToolbarEnabled(true);
+
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mUserSelections.push(latLng);
+                if(mUserSelections.size() > 1 && mUserSelections.size() <= 2){
+                    Polyline pLine = mMap.addPolyline(new PolylineOptions());
+                    pLine.setPoints(mUserSelections);
+                    pLine.setColor(Color.CYAN);
+                }
+                else if(mUserSelections.size() > 2){
+                    mMap.clear();
+                    PolygonOptions pOptions = new PolygonOptions()
+                            .strokeColor(Color.BLUE)
+                            .fillColor(Color.GRAY);
+                    pOptions.addAll(mUserSelections);
+
+                    Polygon poly = mMap.addPolygon(pOptions);
+                }
+            }
+        });
+
         // Add a marker in Sydney and move the camera
         LatLng montreal = new LatLng(45.5017, -73.5673);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
 
-        for(LatLng coord : hardCodedList){
+        for(LatLng coord : mHardCodedList){
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(coord)
                     .radius(50000)
