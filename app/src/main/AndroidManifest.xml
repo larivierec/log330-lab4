@@ -35,7 +35,7 @@
 
             <!-- TODO Remove this when we dev the login -->
             <intent-filter>
-                <action android:name="android.intent.action.MqAIN" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
