@@ -1,7 +1,6 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
 import android.app.Activity;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;

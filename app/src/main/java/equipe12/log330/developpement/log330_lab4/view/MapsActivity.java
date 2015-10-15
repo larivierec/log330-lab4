@@ -1,25 +1,33 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
-import android.support.v4.app.FragmentActivity;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import equipe12.log330.developpement.log330_lab4.R;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.LinkedList;
+
+import equipe12.log330.developpement.log330_lab4.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LinkedList<LatLng> hardCodedList = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        hardCodedList.push(new LatLng(45.501689, -73.567256 )); //ets
+        hardCodedList.push(new LatLng(55.00,-115)); //alberta
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -41,8 +49,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng montreal = new LatLng(45.5017, -73.5673);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
+
+        for(LatLng coord : hardCodedList){
+            Circle circle = mMap.addCircle(new CircleOptions()
+                    .center(coord)
+                    .radius(50000)
+                    .strokeColor(Color.BLUE));
+        }
     }
 }
