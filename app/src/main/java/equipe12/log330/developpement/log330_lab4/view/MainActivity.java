@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,7 +105,9 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
                 map_mode.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        gps_info_dialog.dismiss();
+                        Intent mapsIntent = new Intent(mContext, MapsActivity.class);
+                        startActivity(mapsIntent);
                     }
                 });
 
