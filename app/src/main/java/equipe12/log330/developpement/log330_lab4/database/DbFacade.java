@@ -24,7 +24,7 @@ public class DbFacade {
     }
 
     public User isValidUser(String user, String password) {
-        return null;
+        return dbTransaction.isValidUser(user, password);
     }
 
     public List<Zone> getZones(GPS gps) {

@@ -34,8 +34,8 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //create dummy coordinates
 
+        //create dummy coordinates
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
         gpsButton.setOnClickListener(new View.OnClickListener() {

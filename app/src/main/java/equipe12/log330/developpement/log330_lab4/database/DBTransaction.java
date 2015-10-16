@@ -1,6 +1,7 @@
 package equipe12.log330.developpement.log330_lab4.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -22,6 +23,19 @@ public class DBTransaction {
 
     public User isValidUser(String user, String password) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor c = db.query(FeedReaderContract.UserFeedEntry.USER_TABLE_NAME,
+                new String[] {FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID,
+                FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME,
+                FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD},
+                FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME + " = ? and " + FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD + " = ?",
+                new String[] {user, password},
+                null,
+                null,
+                null);
+        if(c.moveToFirst()) {
+         return new User(c.getInt(c.getColumnIndex(FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID)),
+                 c.getString(c.getColumnIndex(FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME)));
+        }
         return null;
     }
 

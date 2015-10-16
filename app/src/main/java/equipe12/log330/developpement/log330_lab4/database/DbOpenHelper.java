@@ -15,7 +15,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String USER_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.UserFeedEntry.USER_TABLE_NAME + " ("+
-                    FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID +" integer PRIMARY KEY AUTOINCREMENT ASC, " +
+                    FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID +" integer PRIMARY KEY AUTOINCREMENT, " +
                     FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME + " TEXT, " +
                     FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD + " TEXT)";
     private static final String SQL_DELETE_USER =
@@ -23,7 +23,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String GPS_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME +
-                    " (" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " TEXT PRIMARY KEY ASC," +
+                    " (" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " TEXT PRIMARY KEY," +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME + " TEXT," +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE + " blob, " +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + " integer, " +
@@ -35,11 +35,11 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String GPS_POSITION_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME +
-                    " (" + FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT ASC, " +
+                    " (" + FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT, " +
                     FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LAT + " integer, " +
                     FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LON + " integer, " +
                     FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_CREATED_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                    FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + "integer, " +
+                    FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + " integer, " +
                     "FOREIGN KEY(" + FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + ") " +
                     "REFERENCES GPS(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + "))";
     private static final String SQL_DELETE_GPS_POSITION =
@@ -47,7 +47,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String ZONE_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME +
-                    " (" + FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT ASC, " +
+                    " (" + FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT, " +
                     FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_NAME + " TEXT, " +
                     FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_RADIUS + " integer DEFAULT -1, " +
                     FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ACTIVE + " NUMERIC, " +
@@ -59,7 +59,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String ZONE_POINT_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.ZonePointFeedEntry.ZONE_POINT_TABLE_NAME +
-                    " (" + FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT ASC, " +
+                    " (" + FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID + " integer PRIMARY KEY AUTOINCREMENT, " +
                     FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT + " integer, " +
                     FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON + " integer, " +
                     FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE + " integer, " +
