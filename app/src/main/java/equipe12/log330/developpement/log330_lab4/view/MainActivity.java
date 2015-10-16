@@ -51,7 +51,6 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
 
                 final EditText view_gpsname = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_name);
                 final EditText view_gpsid = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_id);
-                final EditText view_gpstype = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_type);
 
 
                 dialogAdd.setOnClickListener(new View.OnClickListener() {
@@ -59,9 +58,8 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
                     public void onClick(View v) {
                         String gpsname = view_gpsname.getText().toString();
                         String gpsid = view_gpsid.getText().toString();
-                        String gpstype = view_gpstype.getText().toString();
 
-                        MainActivity.this.onDialogButtonAdded(gpsname, gpsid, gpstype);
+                        MainActivity.this.onDialogButtonAdded(gpsname, gpsid, null);
                         gps_data_dialog.dismiss();
                     }
                 });
@@ -146,9 +144,9 @@ public class MainActivity extends Activity implements DialogGPSAccepted {
 
 
     @Override
-    public void onDialogButtonAdded(String gpsName, String gpsID, String gpsType) {
-        if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty() && !gpsType.trim().isEmpty()){
-            mGPSList.push(new GPS(Integer.parseInt(gpsID), gpsName, gpsType));
+    public void onDialogButtonAdded(String gpsName, String gpsID, String assignedPicture) {
+        if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty()){
+            mGPSList.push(new GPS(gpsID, gpsName, assignedPicture));
             mGPSAdapter.notifyDataSetChanged();
         }
     }

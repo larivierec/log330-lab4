@@ -45,11 +45,12 @@ public class GPSAdapter extends ArrayAdapter<GPS> {
             vh = (GPSViewHolder) row.getTag();
         }
 
-        vh.theText.setText(mGPSItems.get(position).getmGPSName());
+        vh.theText.setText(mGPSItems.get(position).getGPSName());
 
         return row;
     }
 
+    //Google ViewHolder pattern
     class GPSViewHolder{
         TextView theText;
         ImageView theImage;

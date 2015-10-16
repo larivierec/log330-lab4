@@ -5,31 +5,31 @@ package equipe12.log330.developpement.log330_lab4.model;
  */
 public abstract class GPSInfo {
 
-    private Integer mGPSID;
+    private String mGPSID;
     private String mGPSName;
-    private String mGPSType;
+    private String mAssignedPicture;
 
-    public String getmGPSType() {
-        return mGPSType;
+    public String getAssignedPicture() {
+        return mAssignedPicture;
     }
 
-    protected void setmGPSType(String mGPSType) {
-        this.mGPSType = mGPSType;
+    protected void setAssignedPicture(String mAssignedPicture) {
+        this.mAssignedPicture = mAssignedPicture;
     }
 
-    public Integer getmGPSID() {
+    public String getGPSID() {
         return mGPSID;
     }
 
-    protected void setmGPSID(Integer mGPSID) {
+    protected void setGPSID(String mGPSID) {
         this.mGPSID = mGPSID;
     }
 
-    public String getmGPSName() {
+    public String getGPSName() {
         return mGPSName;
     }
 
-    protected void setmGPSName(String mGPSName) {
+    protected void setGPSName(String mGPSName) {
         this.mGPSName = mGPSName;
     }
 }
