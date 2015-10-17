@@ -69,17 +69,12 @@
                 android:layout_weight="0.00"
                 android:gravity="left" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="59dp"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_btn_image_pick"
-                android:id="@+id/btn_image_pick" />
-
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/img_view_dialog" />
+                android:layout_width="50dp"
+                android:layout_height="150dp"
+                android:id="@+id/img_view_dialog"
+                android:src="@mipmap/gps_image"
+                android:layout_weight="1" />
 
         </LinearLayout>
 

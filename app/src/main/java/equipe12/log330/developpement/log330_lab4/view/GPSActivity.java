@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.LinkedList;
 
 import equipe12.log330.developpement.log330_lab4.R;
@@ -33,6 +40,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     private ListView gpsDataLV;
     private DbFacade dbFacade;
     private LinkedList<GPS> mGPSList;
+    private ImageView view_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +63,16 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
 
                 final EditText view_gpsname = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_name);
                 final EditText view_gpsid = (EditText) gps_data_dialog.findViewById(R.id.txt_gps_id);
+                view_image = (ImageView) gps_data_dialog.findViewById(R.id.img_view_dialog);
 
+                view_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent photoPicker = new Intent(Intent.ACTION_PICK);
+                        photoPicker.setType("image/*");
+                        startActivityForResult(photoPicker, 1000);
+                    }
+                });
 
                 dialogAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -152,10 +169,32 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     public void onDialogButtonAdded(String gpsName, String gpsID, String assignedPicture) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty()){
             DbFacade f = new DbFacade(getBaseContext());
-            mGPSList = f.addGps(CommonVariables.user, new GPS(gpsID, gpsName, null));
+            mGPSList = f.addGps(CommonVariables.user, new GPS(gpsID, gpsName, ((BitmapDrawable)view_image.getDrawable()).getBitmap()));
             mGPSAdapter = new GPSAdapter(this, mGPSList);
             gpsDataLV.setAdapter(mGPSAdapter);
             mGPSAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case 1000:
+                if(resultCode == RESULT_OK){
+                    try {
+                        final Uri imageUri = imageReturnedIntent.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        view_image.setImageBitmap(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        }
+    }
+
+
 }

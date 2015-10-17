@@ -1,6 +1,7 @@
 package equipe12.log330.developpement.log330_lab4.utility;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +45,13 @@ public class GPSAdapter extends ArrayAdapter<GPS> {
         }else{
             vh = (GPSViewHolder) row.getTag();
         }
-
-        vh.theText.setText(mGPSItems.get(position).getGPSName());
+        
+        GPS gps = mGPSItems.get(position);
+        vh.theText.setText(gps.getGPSName());
+        Bitmap img = gps.getAssignedPicture();
+        if(img != null) {
+            vh.theImage.setImageBitmap(img);
+        }
 
         return row;
     }
