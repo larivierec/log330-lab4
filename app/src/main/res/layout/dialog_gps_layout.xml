@@ -66,17 +66,21 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/lbl_gps_type"
                 android:id="@+id/textView3"
-                android:layout_weight="0.02"
+                android:layout_weight="0.00"
                 android:gravity="left" />
 
-            <EditText
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="59dp"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_btn_image_pick"
+                android:id="@+id/btn_image_pick" />
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_gps_type"
-                android:layout_weight="0.18"
-                android:gravity="left"
-                android:enabled="true"
-                android:inputType="text" />
+                android:id="@+id/img_view_dialog" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -90,15 +94,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_message"
-                android:id="@+id/btn_add_gps_data"
-                android:gravity="start" />
+                android:id="@+id/btn_add_gps_data" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel_message"
-                android:id="@+id/btn_cancel_gps_data"
-                android:gravity="end" />
+                android:id="@+id/btn_cancel_gps_data" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
