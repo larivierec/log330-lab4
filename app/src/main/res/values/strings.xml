@@ -11,6 +11,7 @@
     <string name="lbl_gps_name">GPS Name:</string>
     <string name="lbl_gps_id">GPS ID:</string>
     <string name="lbl_gps_type">Image:</string>
+    <string name="lbl_btn_image_pick">...</string>
 
     <string name="add_gps_message_dialog">Enter the following fields to add a GPS.</string>
     <string name="add_message">Add</string>

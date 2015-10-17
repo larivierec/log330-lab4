@@ -61,6 +61,9 @@
             android:name=".view.MapsActivity"
             android:label="@string/title_activity_maps" >
         </activity>
+        <activity android:name=".view.GPSDataDialog"
+            android:theme="@android:style/Theme.Holo.Dialog">
+        </activity>
     </application>
 
 </manifest>
