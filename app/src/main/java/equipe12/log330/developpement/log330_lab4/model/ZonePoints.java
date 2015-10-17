@@ -9,18 +9,18 @@ import java.util.LinkedList;
  */
 public class ZonePoints extends Zone {
 
-    private LinkedList<LatLng> radius;
+    private LinkedList<LatLng> points;
 
-    public ZonePoints(int id, String name, boolean active, LinkedList<LatLng> radius) {
+    public ZonePoints(int id, String name, boolean active, LinkedList<LatLng> points) {
         super(id, name, active);
-        this.radius = radius;
+        this.points = points;
     }
 
-    public LinkedList<LatLng> getRadius() {
-        return radius;
+    public LinkedList<LatLng> getPoints() {
+        return points;
     }
 
-    public void setRadius(LinkedList<LatLng> radius) {
-        this.radius = radius;
+    public void setPoints(LinkedList<LatLng> radius) {
+        this.points = radius;
     }
 }

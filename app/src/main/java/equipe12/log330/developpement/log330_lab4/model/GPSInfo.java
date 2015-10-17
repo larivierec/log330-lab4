@@ -1,5 +1,7 @@
 package equipe12.log330.developpement.log330_lab4.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Chris on 10/7/2015.
  */
@@ -7,13 +9,13 @@ public abstract class GPSInfo {
 
     private String mGPSID;
     private String mGPSName;
-    private String mAssignedPicture;
+    private Bitmap mAssignedPicture;
 
-    public String getAssignedPicture() {
+    public Bitmap getAssignedPicture() {
         return mAssignedPicture;
     }
 
-    protected void setAssignedPicture(String mAssignedPicture) {
+    protected void setAssignedPicture(Bitmap mAssignedPicture) {
         this.mAssignedPicture = mAssignedPicture;
     }
 

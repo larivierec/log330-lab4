@@ -145,7 +145,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     @Override
     public void onDialogButtonAdded(String gpsName, String gpsID, String assignedPicture) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty()){
-            mGPSList.push(new GPS(gpsID, gpsName, assignedPicture));
+            mGPSList.push(new GPS(gpsID, gpsName, null));
             mGPSAdapter.notifyDataSetChanged();
         }
     }

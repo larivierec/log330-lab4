@@ -28,7 +28,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE + " blob, " +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + " integer, " +
                     "FOREIGN KEY(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + ") " +
-                    "REFERENCES user(" + FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID + "))";
+                    "REFERENCES user(" + FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID + ") ON DELETE CASCADE)";
     private static final String SQL_DELETE_GPS =
             "DROP TABLE IF EXISTS " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME;
 
@@ -41,7 +41,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_CREATED_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
                     FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + " integer, " +
                     "FOREIGN KEY(" + FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + ") " +
-                    "REFERENCES GPS(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + "))";
+                    "REFERENCES GPS(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + ") ON DELETE CASCADE)";
     private static final String SQL_DELETE_GPS_POSITION =
             "DROP TABLE IF EXISTS " + FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME;
 
@@ -53,7 +53,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ACTIVE + " NUMERIC, " +
                     FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID_GPS + " TEXT, " +
                     "FOREIGN KEY(" + FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID_GPS + ") " +
-                    "REFERENCES GPS(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID  + "))";
+                    "REFERENCES GPS(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID  + ") ON DELETE CASCADE)";
     private static final String SQL_DELETE_ZONE =
             "DROP TABLE IF EXISTS " + FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME;
 
@@ -64,7 +64,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON + " integer, " +
                     FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE + " integer, " +
                     "FOREIGN KEY(" + FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE + ") " +
-                    "REFERENCES zone(" + FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + "))";
+                    "REFERENCES zone(" + FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + ") ON DELETE CASCADE)";
     private static final String SQL_DELETE_ZONE_POINT =
             "DROP TABLE IF EXISTS " + FeedReaderContract.ZonePointFeedEntry.ZONE_POINT_TABLE_NAME;
 
