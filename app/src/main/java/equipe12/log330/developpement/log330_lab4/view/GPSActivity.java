@@ -16,8 +16,10 @@ import android.widget.ListView;
 import java.util.LinkedList;
 
 import equipe12.log330.developpement.log330_lab4.R;
+import equipe12.log330.developpement.log330_lab4.database.DbFacade;
 import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
 import equipe12.log330.developpement.log330_lab4.model.GPS;
+import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 import equipe12.log330.developpement.log330_lab4.utility.GPSAdapter;
 
 /**
@@ -28,13 +30,16 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
 
     final private Context mContext = this;
     private GPSAdapter mGPSAdapter;
-    private LinkedList<GPS> mGPSList = new LinkedList<>();
+    private ListView gpsDataLV;
+    private DbFacade dbFacade;
+    private LinkedList<GPS> mGPSList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbFacade = new DbFacade(getBaseContext());
         //create dummy coordinates
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
@@ -73,8 +78,9 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
             }
         });
 
-        final ListView gpsDataLV = (ListView) findViewById(R.id.lst_avail_gps);
-        mGPSAdapter = new GPSAdapter(this,mGPSList);
+        gpsDataLV = (ListView) findViewById(R.id.lst_avail_gps);
+        mGPSList = dbFacade.getGps(CommonVariables.user);
+        mGPSAdapter = new GPSAdapter(this, mGPSList);
         gpsDataLV.setAdapter(mGPSAdapter);
 
         gpsDataLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,7 +96,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                 gps_remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mGPSList.remove(position);
+                        dbFacade.deleteGps(CommonVariables.user, mGPSList.remove(position));
                         mGPSAdapter.notifyDataSetChanged();
                         gps_info_dialog.dismiss();
                     }
@@ -145,7 +151,10 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     @Override
     public void onDialogButtonAdded(String gpsName, String gpsID, String assignedPicture) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty()){
-            mGPSList.push(new GPS(gpsID, gpsName, null));
+            DbFacade f = new DbFacade(getBaseContext());
+            mGPSList = f.addGps(CommonVariables.user, new GPS(gpsID, gpsName, null));
+            mGPSAdapter = new GPSAdapter(this, mGPSList);
+            gpsDataLV.setAdapter(mGPSAdapter);
             mGPSAdapter.notifyDataSetChanged();
         }
     }

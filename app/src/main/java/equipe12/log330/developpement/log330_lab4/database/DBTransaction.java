@@ -10,9 +10,7 @@ import android.graphics.BitmapFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.User;
@@ -67,8 +65,8 @@ class DBTransaction {
         return null;
     }
 
-    public List<Zone> getZones(GPS gps) {
-        List<Zone> zones = new ArrayList<Zone>();
+    public LinkedList<Zone> getZones(GPS gps) {
+        LinkedList<Zone> zones = new LinkedList<Zone>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor c = db.query(FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME,
                 new String[] {FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID,
@@ -104,6 +102,7 @@ class DBTransaction {
                         lst.add(new LatLng(c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
                                 c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))));
                         zones.add(new ZonePoints(zoneId, zoneName, zoneActive, lst));
+                        c2.moveToNext();
                     }
                 } else {
                     zones.add(new ZoneRadius(
@@ -115,12 +114,13 @@ class DBTransaction {
                             zoneRadius));
                 }
             }
+            c.moveToNext();
         }
         return zones;
 
     }
 
-    public List<Zone> addZone(GPS gps, Zone zone) {
+    public LinkedList<Zone> addZone(GPS gps, Zone zone) {
         if(zone.getClass() == ZonePoints.class) {
             ZonePoints zp = (ZonePoints) zone;
             SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -180,12 +180,12 @@ class DBTransaction {
         return getZones(gps);
     }
 
-    public List<Zone> modifyZone(GPS gps, Zone zone) {
+    public LinkedList<Zone> modifyZone(GPS gps, Zone zone) {
         deleteZone(gps, zone);
         return addZone(gps, zone);
     }
 
-    public List<Zone> deleteZone(GPS gps, Zone zone) {
+    public LinkedList<Zone> deleteZone(GPS gps, Zone zone) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
         String selection = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " LIKE ?";
@@ -194,8 +194,8 @@ class DBTransaction {
         return getZones(gps);
     }
 
-    public List<GPS> getGps(User user) {
-        List<GPS> gps = new ArrayList<GPS>();
+    public LinkedList<GPS> getGps(User user) {
+        LinkedList<GPS> gps = new LinkedList<GPS>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor c = db.query(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
                 new String[] {FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID,
@@ -210,24 +210,31 @@ class DBTransaction {
         c.moveToFirst();
         while (!c.isAfterLast()) {
             byte[] byteArray = c.getBlob(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE));
-
+            Bitmap img = null;
+            if(byteArray != null) {
+                BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            }
             gps.add(new GPS(c.getString(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID)),
                     c.getString(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME)),
-                    BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length)));
+                    img));
+            c.moveToNext();
         }
         return gps;
     }
 
-    public List<GPS> addGps(User user, GPS gps) {
+    public LinkedList<GPS> addGps(User user, GPS gps) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        gps.getAssignedPicture().compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID, gps.getGPSID());
         values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME, gps.getGPSName());
-        values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE, outputStream.toByteArray());
+
+        Bitmap img = gps.getAssignedPicture();
+        if(img != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            img.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE, outputStream.toByteArray());
+        }
+
         values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
         long newRowId = db.insert(
                 FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
@@ -236,12 +243,12 @@ class DBTransaction {
         return getGps(user);
     }
 
-    public List<GPS> modifyGps(User user, GPS gps) {
+    public LinkedList<GPS> modifyGps(User user, GPS gps) {
         deleteGps(user, gps);
         return addGps(user, gps);
     }
 
-    public List<GPS> deleteGps(User user, GPS gps) {
+    public LinkedList<GPS> deleteGps(User user, GPS gps) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
         String selection = FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " LIKE ?";
@@ -251,6 +258,21 @@ class DBTransaction {
     }
 
     public LatLng getCurrentPosition(GPS gps) {
-        return new LatLng(45.501689, -73.567256);
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor c = db.query(FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME,
+                new String[] {FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID,
+                        FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LAT,
+                        FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LON},
+                FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS + " = ?",
+                new String[] {gps.getGPSID()},
+                null,
+                null,
+                FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_CREATED_TIME + " DESC LIMIT 1");
+
+        if (c.moveToFirst()) {
+            return new LatLng(c.getDouble(c.getColumnIndex(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LAT)),
+                    c.getDouble(c.getColumnIndex(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LON)));
+        }
+        return null;
     }
 }
