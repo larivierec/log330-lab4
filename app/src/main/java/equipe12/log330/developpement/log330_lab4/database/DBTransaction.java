@@ -1,5 +1,6 @@
 package equipe12.log330.developpement.log330_lab4.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,6 +36,25 @@ public class DBTransaction {
         if(c.moveToFirst()) {
          return new User(c.getInt(c.getColumnIndex(FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID)),
                  c.getString(c.getColumnIndex(FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME)));
+        }
+        return null;
+    }
+
+    public User addUser(String user, String password) {
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME, user);
+        values.put(FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD, password);
+        long newRowId = -1;
+        try {
+            newRowId = db.insertOrThrow(
+                    FeedReaderContract.UserFeedEntry.USER_TABLE_NAME,
+                    null,
+                    values);
+        } catch (Exception e) {
+        }
+        if(newRowId != -1) {
+            return new User(newRowId, user);
         }
         return null;
     }

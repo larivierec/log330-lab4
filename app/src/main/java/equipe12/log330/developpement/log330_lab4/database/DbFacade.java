@@ -27,6 +27,10 @@ public class DbFacade {
         return dbTransaction.isValidUser(user, password);
     }
 
+    public User addUser(String user, String password) {
+        return dbTransaction.addUser(user, password);
+    }
+
     public List<Zone> getZones(GPS gps) {
         return new ArrayList<Zone>();
     }

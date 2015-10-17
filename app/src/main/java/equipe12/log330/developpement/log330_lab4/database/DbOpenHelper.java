@@ -16,7 +16,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
     private static final String USER_TABLE_CREATE =
             "CREATE TABLE " + FeedReaderContract.UserFeedEntry.USER_TABLE_NAME + " ("+
                     FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID +" integer PRIMARY KEY AUTOINCREMENT, " +
-                    FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME + " TEXT, " +
+                    FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME + " TEXT UNIQUE, " +
                     FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD + " TEXT)";
     private static final String SQL_DELETE_USER =
             "DROP TABLE IF EXISTS " + FeedReaderContract.UserFeedEntry.USER_TABLE_NAME;

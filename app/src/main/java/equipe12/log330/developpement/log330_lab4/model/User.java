@@ -7,17 +7,17 @@ import android.graphics.Bitmap;
  */
 public class User {
 
-    private int id;
+    private long id;
     private String username;
     private String password;
 
-    public User(int id, String username) {
+    public User(long id, String username) {
         this.id = id;
         this.username = username;
         this.password = "";
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
