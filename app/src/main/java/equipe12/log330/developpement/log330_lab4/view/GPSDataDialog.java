@@ -11,11 +11,7 @@ import android.widget.ImageView;
 import java.util.LinkedList;
 
 import equipe12.log330.developpement.log330_lab4.R;
-<<<<<<< HEAD
 import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAccepted;
-=======
-import equipe12.log330.developpement.log330_lab4.interfaces.DialogGPSAcceptedListener;
->>>>>>> 085c0551d7a2a13c167c05c3a6da03e2a14d23ab
 
 
 /**
