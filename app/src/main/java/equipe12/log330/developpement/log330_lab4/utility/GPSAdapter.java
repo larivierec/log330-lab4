@@ -45,7 +45,7 @@ public class GPSAdapter extends ArrayAdapter<GPS> {
         }else{
             vh = (GPSViewHolder) row.getTag();
         }
-        
+
         GPS gps = mGPSItems.get(position);
         vh.theText.setText(gps.getGPSName());
         Bitmap img = gps.getAssignedPicture();

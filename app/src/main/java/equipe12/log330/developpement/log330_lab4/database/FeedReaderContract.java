@@ -26,6 +26,12 @@ final class FeedReaderContract {
         public static final String COLUMN_NAME_ID_USER = "idUser";
     }
 
+    public static abstract class UserGPSFeedEntry implements BaseColumns {
+        public static final String USER_GPS_TABLE_NAME = "User_GPS";
+        public static final String COLUMN_NAME_ID_USER = "idUser";
+        public static final String COLUMN_NAME_ID_GPS = "idGps";
+    }
+
     public static abstract class GPSPositionFeedEntry implements BaseColumns {
         public static final String GPS_POSITION_TABLE_NAME = "GPSPosition";
         public static final String COLUMN_NAME_ID = "id";

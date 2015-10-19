@@ -26,10 +26,19 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     " (" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " TEXT PRIMARY KEY," +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME + " TEXT," +
                     FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE + " blob, " +
-                    FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + " integer, " +
-                    "FOREIGN KEY(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + ") " +
-                    "REFERENCES user(" + FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID + ") ON DELETE CASCADE)";
+                    FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + " integer)";
     private static final String SQL_DELETE_GPS =
+            "DROP TABLE IF EXISTS " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME;
+
+    private static final String USER_GPS_TABLE_CREATE =
+            "CREATE TABLE " + FeedReaderContract.UserGPSFeedEntry.USER_GPS_TABLE_NAME +
+                    " (" + FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS + " TEXT," +
+                    FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER + " integer," +
+                    "FOREIGN KEY(" + FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER + ") " +
+                    "REFERENCES user(" + FeedReaderContract.UserFeedEntry.COLUMN_NAME_ID + ")," +
+                    "FOREIGN KEY(" + FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS + ") " +
+                    "REFERENCES user(" + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + "))";
+    private static final String SQL_DELETE_USER_GPS =
             "DROP TABLE IF EXISTS " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME;
 
 
@@ -76,6 +85,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(USER_TABLE_CREATE);
         db.execSQL(GPS_TABLE_CREATE);
+        db.execSQL(USER_GPS_TABLE_CREATE);
         db.execSQL(GPS_POSITION_TABLE_CREATE);
         db.execSQL(ZONE_TABLE_CREATE);
         db.execSQL(ZONE_POINT_TABLE_CREATE);
@@ -95,6 +105,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ZONE_POINT);
         db.execSQL(SQL_DELETE_ZONE);
         db.execSQL(SQL_DELETE_GPS_POSITION);
+        db.execSQL(SQL_DELETE_USER_GPS);
         db.execSQL(SQL_DELETE_GPS);
         db.execSQL(SQL_DELETE_USER);
         onCreate(db);

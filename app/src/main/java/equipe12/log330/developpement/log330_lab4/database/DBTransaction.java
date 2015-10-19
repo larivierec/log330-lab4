@@ -47,7 +47,7 @@ class DBTransaction {
     }
 
     public User addUser(String user, String password) {
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.UserFeedEntry.COLUMN_NAME_NAME, user);
         values.put(FeedReaderContract.UserFeedEntry.COLUMN_NAME_PASSWORD, password);
@@ -123,7 +123,7 @@ class DBTransaction {
     public LinkedList<Zone> addZone(GPS gps, Zone zone) {
         if(zone.getClass() == ZonePoints.class) {
             ZonePoints zp = (ZonePoints) zone;
-            SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+            SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_NAME, zp.getName());
             values.put(FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_RADIUS, -1);
@@ -197,7 +197,8 @@ class DBTransaction {
     public LinkedList<GPS> getGps(User user) {
         LinkedList<GPS> gps = new LinkedList<GPS>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor c = db.query(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
+
+       /* Cursor c = db.query(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
                 new String[] {FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID,
                         FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME,
                         FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE},
@@ -205,17 +206,24 @@ class DBTransaction {
                 new String[] {String.valueOf(user.getId())},
                 null,
                 null,
-                null);
+                null);*/
+        Cursor c = db.rawQuery("select g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + "," +
+                "g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME + "," +
+                "g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE + " from " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME +
+                " as g join " + FeedReaderContract.UserGPSFeedEntry.USER_GPS_TABLE_NAME +
+                " as ug on ug." + FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS +
+                " = g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID +
+                " where ug." + FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER + " = ?", new String[] {String.valueOf(user.getId())});
 
         c.moveToFirst();
         while (!c.isAfterLast()) {
-            byte[] byteArray = c.getBlob(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE));
+            byte[] byteArray = c.getBlob(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE));
             Bitmap img = null;
             if(byteArray != null) {
                 BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             }
-            gps.add(new GPS(c.getString(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME)),
+            gps.add(new GPS(c.getString(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID)),
+                    c.getString(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME)),
                     img));
             c.moveToNext();
         }
@@ -223,7 +231,7 @@ class DBTransaction {
     }
 
     public LinkedList<GPS> addGps(User user, GPS gps) {
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID, gps.getGPSID());
         values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME, gps.getGPSName());
@@ -235,11 +243,20 @@ class DBTransaction {
             values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE, outputStream.toByteArray());
         }
 
-        values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
-        long newRowId = db.insert(
+        //values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
+
+        db.insertOrThrow(
                 FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
                 null,
                 values);
+
+        ContentValues values1 = new ContentValues();
+        values1.put(FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS, gps.getGPSID());
+        values1.put(FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
+        db.insert(
+                FeedReaderContract.UserGPSFeedEntry.USER_GPS_TABLE_NAME,
+                null,
+                values1);
         return getGps(user);
     }
 
@@ -251,9 +268,18 @@ class DBTransaction {
     public LinkedList<GPS> deleteGps(User user, GPS gps) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
-        String selection = FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " LIKE ?";
-        String[] selectionArgs = { gps.getGPSID() };
-        db.delete(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME, selection, selectionArgs);
+        String selection = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID_GPS + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(gps.getGPSID()) };
+        db.delete(FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME, selection, selectionArgs);
+
+        selection = FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " LIKE ?";
+        String[] selectionArgs1 = { gps.getGPSID() };
+        db.delete(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME, selection, selectionArgs1);
+
+        selection = FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS + " LIKE ? and " +
+                FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER + " = ?";
+        String[] selectionArgs2 = { gps.getGPSID(), String.valueOf(user.getId()) };
+        db.delete(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME, selection, selectionArgs2);
         return getGps(user);
     }
 
