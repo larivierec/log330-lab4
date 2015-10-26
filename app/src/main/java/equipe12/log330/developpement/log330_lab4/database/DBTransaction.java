@@ -143,7 +143,7 @@ class DBTransaction {
                     values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT, ll.latitude);
                     values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON, ll.longitude);
                     values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE, newRowId);
-                    newRowId = db.insertOrThrow(
+                    db.insertOrThrow(
                             FeedReaderContract.ZonePointFeedEntry.ZONE_POINT_TABLE_NAME,
                             null,
                             values1);
@@ -198,15 +198,6 @@ class DBTransaction {
         LinkedList<GPS> gps = new LinkedList<GPS>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
-       /* Cursor c = db.query(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
-                new String[] {FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID,
-                        FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME,
-                        FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE},
-                FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER + " = ?",
-                new String[] {String.valueOf(user.getId())},
-                null,
-                null,
-                null);*/
         Cursor c = db.rawQuery("select g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + "," +
                 "g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME + "," +
                 "g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE + " from " + FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME +
@@ -242,8 +233,6 @@ class DBTransaction {
             img.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
             values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE, outputStream.toByteArray());
         }
-
-        //values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
 
         db.insertOrThrow(
                 FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
