@@ -18,6 +18,26 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main_menu);
 
         final Button listGpsButton = (Button) findViewById(R.id.btnListGps);
+        final Button carteButton = (Button) findViewById(R.id.btnMap);
+        final Button zoneButton = (Button) findViewById(R.id.btnListZone);
+
+        zoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        MapMenuActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+        carteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        MapMenuActivity.class);
+                startActivity(myIntent);
+            }
+        });
         listGpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
