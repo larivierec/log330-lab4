@@ -49,5 +49,7 @@ public class DbFacade {
 
     public LinkedList<GPS> deleteGps(User user,GPS gps) { return dbTransaction.deleteGps(user, gps); }
 
+    public void addCurrentPosition(GPS gps, LatLng latLng) { dbTransaction.addCurrentPosition(gps ,latLng); }
+
     public LatLng getCurrentPosition(GPS gps) { return dbTransaction.getCurrentPosition(gps); }
 }

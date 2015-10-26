@@ -272,6 +272,18 @@ class DBTransaction {
         return getGps(user);
     }
 
+    public void addCurrentPosition(GPS gps, LatLng latLng) {
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LAT, latLng.latitude);
+        values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LON, latLng.longitude);
+        values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS, gps.getGPSID());
+        db.insert(
+                FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME,
+                null,
+                values);
+    }
+
     public LatLng getCurrentPosition(GPS gps) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor c = db.query(FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME,
