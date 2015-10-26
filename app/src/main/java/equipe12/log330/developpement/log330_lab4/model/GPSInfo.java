@@ -34,4 +34,25 @@ public abstract class GPSInfo {
     protected void setGPSName(String mGPSName) {
         this.mGPSName = mGPSName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GPSInfo)) return false;
+
+        GPSInfo gpsInfo = (GPSInfo) o;
+
+        if (!mGPSID.equals(gpsInfo.mGPSID)) return false;
+        if (!mGPSName.equals(gpsInfo.mGPSName)) return false;
+        return mAssignedPicture.equals(gpsInfo.mAssignedPicture);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mGPSID.hashCode();
+        result = 31 * result + mGPSName.hashCode();
+        result = 31 * result + mAssignedPicture.hashCode();
+        return result;
+    }
 }
