@@ -41,9 +41,11 @@ public class LocationEvent extends Observable implements Runnable {
                 DbFacade f = new DbFacade(CommonVariables.context);
                 double x = 0.0001;
                 double y = 0.0001;
-                double multiplier = 1;
-
+                double multiplierX = Math.random() < 0.5 ? -1 : 1;
+                double multiplierY = Math.random() < 0.5 ? -1 : 1;
                 LinkedList<GPS> gpses = f.getGps(CommonVariables.user);
+                LinkedList<GPS> wasOut = new LinkedList<GPS>();
+
                 for (GPS g : gpses) {
                     LinkedList<Zone> zones = f.getZones(g);
                     if (zones.size() > 0) {
@@ -53,11 +55,16 @@ public class LocationEvent extends Observable implements Runnable {
                             LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
                             f.addCurrentPosition(g, newLL);
                             if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000)) {
-                                x += (0.0001 * multiplier);
-                                y += (0.0001 * multiplier);
+                                x += (0.0001 * multiplierX);
+                                y += (0.0001 * multiplierY);
+                                wasOut.remove(g);
                             } else {
-                                notifyObservers(g);
-                                multiplier *= -1;
+                                if(!wasOut.contains(g)) {
+                                    notifyObservers(g);
+                                    multiplierX = Math.random() < 0.5 ? -1 : 1;
+                                    multiplierY = Math.random() < 0.5 ? -1 : 1;
+                                    wasOut.add(g);
+                                }
                             }
                         } else if (z instanceof ZonePoints) {
                             LinkedList<LatLng> points = ((ZonePoints) z).getPoints();
@@ -66,11 +73,16 @@ public class LocationEvent extends Observable implements Runnable {
                                 LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
                                 f.addCurrentPosition(g, newLL);
                                 if (isPointInPolygon(newLL, points)) {
-                                    x += (0.0001 * multiplier);
-                                    y += (0.0001 * multiplier);
+                                    wasOut.remove(g);
+                                    x += (0.0001 * multiplierX);
+                                    y += (0.0001 * multiplierY);
                                 } else {
-                                    notifyObservers(g);
-                                    multiplier *= -1;
+                                    if(!wasOut.contains(g)) {
+                                        notifyObservers(g);
+                                        multiplierX = Math.random() < 0.5 ? -1 : 1;
+                                        multiplierY = Math.random() < 0.5 ? -1 : 1;
+                                        wasOut.add(g);
+                                    }
                                 }
                             }
                         }
