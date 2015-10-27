@@ -47,14 +47,14 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbFacade = new DbFacade(getBaseContext());
+        dbFacade = new DbFacade(CommonVariables.context);
         //create dummy coordinates
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog gps_data_dialog = new Dialog(mContext);
+                final Dialog gps_data_dialog = new Dialog(CommonVariables.context);
                 gps_data_dialog.setContentView(R.layout.dialog_gps_layout);
                 gps_data_dialog.setTitle("Add a GPS");
 
@@ -103,7 +103,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
         gpsDataLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final Dialog gps_info_dialog = new Dialog(mContext);
+                final Dialog gps_info_dialog = new Dialog(CommonVariables.context);
                 gps_info_dialog.setContentView(R.layout.lv_command_dialog);
                 gps_info_dialog.setTitle("GPS Commands");
                 final Button gps_remove = (Button) gps_info_dialog.findViewById(R.id.btn_delete_gps);
@@ -123,7 +123,9 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     @Override
                     public void onClick(View v) {
                         gps_info_dialog.dismiss();
-                        Intent mapsIntent = new Intent(mContext, MapsActivity.class);
+                        GPS gpsToPass = mGPSList.get(position);
+                        Intent mapsIntent = new Intent(CommonVariables.context, MapsActivity.class);
+                        mapsIntent.putExtra("equipe12.log330.developpement.log330_lab4", gpsToPass);
                         startActivity(mapsIntent);
                     }
                 });

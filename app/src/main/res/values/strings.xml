@@ -32,6 +32,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="gps_selection_incorrect">You have no inputted any points. Please press on the map.</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_map_menu">MapMenuActivity</string>
     <string name="title_activity_zone_map">ZoneMapActivity</string>
