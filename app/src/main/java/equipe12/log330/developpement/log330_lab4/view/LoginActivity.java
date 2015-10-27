@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import equipe12.log330.developpement.log330_lab4.R;
 import equipe12.log330.developpement.log330_lab4.database.DbFacade;
+import equipe12.log330.developpement.log330_lab4.event.LocationEvent;
 import equipe12.log330.developpement.log330_lab4.model.User;
 import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
@@ -29,6 +30,10 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        CommonVariables.context = getApplicationContext();
+        CommonVariables.dbFacade = new DbFacade(getApplicationContext());
+        CommonVariables.locationEvent = new LocationEvent();
+
         // Set up the login form.
         mUserView = (EditText) findViewById(R.id.userTxt);
 
@@ -38,7 +43,7 @@ public class LoginActivity extends Activity {
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                DbFacade f = new DbFacade(LoginActivity.this);
+                DbFacade f = CommonVariables.dbFacade;
                 User u = f.isValidUser(mUserView.getText().toString(), mPasswordView.getText().toString());
                 if(u == null) {
                     u = f.addUser(mUserView.getText().toString(), mPasswordView.getText().toString());

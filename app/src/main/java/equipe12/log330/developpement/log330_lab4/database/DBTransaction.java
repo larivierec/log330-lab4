@@ -10,7 +10,10 @@ import android.graphics.BitmapFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.User;
@@ -210,13 +213,13 @@ class DBTransaction {
 
         c.moveToFirst();
         while (!c.isAfterLast()) {
-            byte[] byteArray = c.getBlob(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE));
+            byte[] byteArray = c.getBlob(2);
             Bitmap img = null;
             if(byteArray != null) {
                 BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             }
-            gps.add(new GPS(c.getString(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex("g." + FeedReaderContract.GPSFeedEntry.COLUMN_NAME_NAME)),
+            gps.add(new GPS(c.getString(0),
+                    c.getString(1),
                     img));
             c.moveToNext();
         }
@@ -279,6 +282,7 @@ class DBTransaction {
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LAT, latLng.latitude);
         values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_LON, latLng.longitude);
+        values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_CREATED_TIME, getDateTime());
         values.put(FeedReaderContract.GPSPositionFeedEntry.COLUMN_NAME_ID_GPS, gps.getGPSID());
         db.insert(
                 FeedReaderContract.GPSPositionFeedEntry.GPS_POSITION_TABLE_NAME,
@@ -304,4 +308,12 @@ class DBTransaction {
         }
         return null;
     }
+
+    private String getDateTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return simpleDateFormat.format(date);
+    }
+
 }

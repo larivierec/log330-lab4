@@ -1,10 +1,13 @@
 package equipe12.log330.developpement.log330_lab4.event;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 
 import equipe12.log330.developpement.log330_lab4.database.DbFacade;
@@ -18,7 +21,7 @@ import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
  * Created by serge on 2015-10-26.
  */
 public class LocationEvent extends Observable implements Runnable {
-    private int n = 0;
+    private static int n = 0;
 
     public LocationEvent() {
         new Thread(this).start();
@@ -26,52 +29,57 @@ public class LocationEvent extends Observable implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            if (CommonVariables.context != null && CommonVariables.user != null) {
-                DbFacade f = new DbFacade(CommonVariables.context);
-                double x = 0.0001;
-                double y = 0.0001;
-                double multiplierX = Math.random() < 0.5 ? -1 : 1;
-                double multiplierY = Math.random() < 0.5 ? -1 : 1;
-                LinkedList<GPS> gpses = f.getGps(CommonVariables.user);
-                LinkedList<GPS> wasOut = new LinkedList<GPS>();
+        Log.d("LOCATION_EVENT", "Thread" + n++);
+        double x = 0.0001;
+        double y = 0.0001;
+        double multiplierX = Math.random() < 0.5 ? -1 : 1;
+        double multiplierY = Math.random() < 0.5 ? -1 : 1;
+        List<GPS> wasOut = new ArrayList<GPS>();
 
+        while (true) {
+            if (CommonVariables.context != null && CommonVariables.user != null && CommonVariables.dbFacade != null) {
+                LinkedList<GPS> gpses = CommonVariables.dbFacade.getGps(CommonVariables.user);
                 for (GPS g : gpses) {
-                    LinkedList<Zone> zones = f.getZones(g);
-                    if (zones.size() > 0) {
-                        Zone z = zones.get(0);
-                        if (z instanceof ZoneRadius) {
-                            LatLng mid = ((ZoneRadius) z).getMiddle();
-                            LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
-                            f.addCurrentPosition(g, newLL);
-                            if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000)) {
-                                x += (0.0001 * multiplierX);
-                                y += (0.0001 * multiplierY);
-                                wasOut.remove(g);
-                            } else {
-                                if(!wasOut.contains(g)) {
-                                    notifyObservers(g);
+                    if(g != null) {
+                        Log.d("LOCATION_EVENT", "inside Gps : " + g.toString());
+                        LinkedList<Zone> zones = CommonVariables.dbFacade.getZones(g);
+                        if (zones.size() > 0) {
+                            Zone z = zones.get(0);
+                            Log.d("LOCATION_EVENT", "inside zone : " + z.toString());
+                            setChanged();
+                            if (z instanceof ZoneRadius) {
+                                LatLng mid = ((ZoneRadius) z).getMiddle();
+                                Log.d("LOCATION_EVENT", "X : " + x + " Y : " + y);
+                                LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
+                                CommonVariables.dbFacade.addCurrentPosition(g, newLL);
+                                if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000) && !wasOut.contains(g)) {
                                     multiplierX = Math.random() < 0.5 ? -1 : 1;
                                     multiplierY = Math.random() < 0.5 ? -1 : 1;
                                     wasOut.add(g);
-                                }
-                            }
-                        } else if (z instanceof ZonePoints) {
-                            LinkedList<LatLng> points = ((ZonePoints) z).getPoints();
-                            if (points.size() > 0) {
-                                LatLng mid = points.get(0);
-                                LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
-                                f.addCurrentPosition(g, newLL);
-                                if (isPointInPolygon(newLL, points)) {
-                                    wasOut.remove(g);
+                                    notifyObservers(g);
+                                } else {
                                     x += (0.0001 * multiplierX);
                                     y += (0.0001 * multiplierY);
-                                } else {
-                                    if(!wasOut.contains(g)) {
-                                        notifyObservers(g);
+                                    wasOut.remove(g);
+                                    notifyObservers(null);
+                                }
+                            } else if (z instanceof ZonePoints) {
+                                LinkedList<LatLng> points = ((ZonePoints) z).getPoints();
+                                if (points.size() > 0) {
+                                    LatLng mid = points.get(0);
+                                    LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
+                                    CommonVariables.dbFacade.addCurrentPosition(g, newLL);
+                                    Log.d("LOCATION_EVENT", "Added : " + newLL.toString());
+                                    if (!isPointInPolygon(newLL, points) && !wasOut.contains(g)) {
                                         multiplierX = Math.random() < 0.5 ? -1 : 1;
                                         multiplierY = Math.random() < 0.5 ? -1 : 1;
                                         wasOut.add(g);
+                                        notifyObservers(g);
+                                    } else {
+                                        x += (0.0001 * multiplierX);
+                                        y += (0.0001 * multiplierY);
+                                        wasOut.remove(g);
+                                        notifyObservers(null);
                                     }
                                 }
                             }
@@ -80,7 +88,7 @@ public class LocationEvent extends Observable implements Runnable {
                 }
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

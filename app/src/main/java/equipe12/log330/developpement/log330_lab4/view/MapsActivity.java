@@ -42,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        database = new DbFacade(CommonVariables.context);
+        database = CommonVariables.dbFacade;
 
         this.mGPS = CommonVariables.selectedGPS;
 

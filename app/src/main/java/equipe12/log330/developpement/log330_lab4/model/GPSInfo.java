@@ -37,22 +37,20 @@ public abstract class GPSInfo {
 
     @Override
     public boolean equals(Object o) {
+        if (o == null) return false;
         if (this == o) return true;
         if (!(o instanceof GPSInfo)) return false;
 
         GPSInfo gpsInfo = (GPSInfo) o;
 
         if (!mGPSID.equals(gpsInfo.mGPSID)) return false;
-        if (!mGPSName.equals(gpsInfo.mGPSName)) return false;
-        return mAssignedPicture.equals(gpsInfo.mAssignedPicture);
-
+        return mGPSName.equals(gpsInfo.mGPSName);
     }
 
     @Override
     public int hashCode() {
         int result = mGPSID.hashCode();
         result = 31 * result + mGPSName.hashCode();
-        result = 31 * result + mAssignedPicture.hashCode();
         return result;
     }
 }

@@ -47,9 +47,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CommonVariables.context = getApplicationContext();
-
-        dbFacade = new DbFacade(CommonVariables.context);
+        dbFacade = CommonVariables.dbFacade;
         //create dummy coordinates
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
@@ -195,7 +193,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     @Override
     public void onDialogButtonAdded(String gpsName, String gpsID, String assignedPicture) {
         if(!gpsName.trim().isEmpty() && !gpsID.trim().isEmpty()){
-            DbFacade f = new DbFacade(getBaseContext());
+            DbFacade f = CommonVariables.dbFacade;
             mGPSList = f.addGps(CommonVariables.user, new GPS(gpsID, gpsName, ((BitmapDrawable)view_image.getDrawable()).getBitmap()));
             mGPSAdapter = new GPSAdapter(this, mGPSList);
             gpsDataLV.setAdapter(mGPSAdapter);
