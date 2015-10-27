@@ -97,12 +97,14 @@ class DBTransaction {
                     null);
             if(c2.moveToFirst()) {
                 if (zoneRadius == -1) {
+                    LinkedList<LatLng> lst = new LinkedList<LatLng>();
                     while(!c2.isAfterLast()) {
-                        LinkedList<LatLng> lst = new LinkedList<LatLng>();
                         lst.add(new LatLng(c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
                                 c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))));
-                        zones.add(new ZonePoints(zoneId, zoneName, zoneActive, lst));
                         c2.moveToNext();
+                    }
+                    if(!lst.isEmpty()) {
+                        zones.add(new ZonePoints(zoneId, zoneName, zoneActive, lst));
                     }
                 } else {
                     zones.add(new ZoneRadius(

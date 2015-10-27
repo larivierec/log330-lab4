@@ -30,6 +30,11 @@ public class ZonePoints extends Zone {
     }
 
     @Override
+    public LatLng getFirstCoordinate() {
+        return points.getFirst();
+    }
+
+    @Override
     public void drawZone(GoogleMap map) {
         PolygonOptions pOptions = new PolygonOptions()
                 .strokeColor(Color.BLUE)

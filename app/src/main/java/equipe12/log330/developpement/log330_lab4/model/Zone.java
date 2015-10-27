@@ -1,6 +1,7 @@
 package equipe12.log330.developpement.log330_lab4.model;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by serge on 2015-10-16.
@@ -36,6 +37,8 @@ public abstract class Zone {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public abstract LatLng getFirstCoordinate();
 
     public abstract void drawZone(GoogleMap map);
 }

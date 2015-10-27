@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     CircleOptions cOptions = new CircleOptions()
                             .center(latLng)
                             .fillColor(Color.GREEN)
-                            .radius(5000);
+                            .radius(10000);
                     Circle drawingRadius = mMap.addCircle(cOptions);
                 } else if (mUserSelections.size() == 2) {
                     mMap.clear();
@@ -115,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //create a circle
                 if(numberOfPoints == 1){
                     zoneToSave = new ZoneRadius(-1, mGPS.getGPSName() + "_circlezone",
-                            true, mUserSelections.getFirst(), 5000);
+                            true, mUserSelections.getFirst(), 10000);
                 }
                 else if(numberOfPoints >= 3){
                     zoneToSave = new ZonePoints(-1, mGPS.getGPSName() + "_zone",

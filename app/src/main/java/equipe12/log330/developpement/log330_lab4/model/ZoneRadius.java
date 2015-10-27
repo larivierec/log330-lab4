@@ -38,6 +38,11 @@ public class ZoneRadius extends Zone {
     }
 
     @Override
+    public LatLng getFirstCoordinate() {
+        return middle;
+    }
+
+    @Override
     public void drawZone(GoogleMap map) {
         CircleOptions cOptions = new CircleOptions()
                 .center(middle)

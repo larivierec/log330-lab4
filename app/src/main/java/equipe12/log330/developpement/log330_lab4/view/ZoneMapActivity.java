@@ -3,6 +3,7 @@ package equipe12.log330.developpement.log330_lab4.view;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -24,7 +25,7 @@ public class ZoneMapActivity extends FragmentActivity implements OnMapReadyCallb
         mDatabaseConn = new DbFacade(CommonVariables.context);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.zoneMap);
+                .findFragmentById(R.id.mapMenu);
         mapFragment.getMapAsync(this);
     }
 
@@ -32,8 +33,8 @@ public class ZoneMapActivity extends FragmentActivity implements OnMapReadyCallb
         mMap = map;
 
         for(Zone z : mDatabaseConn.getZones(CommonVariables.selectedGPS)){
-            //TODO draw the zones on the map
             z.drawZone(map);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(z.getFirstCoordinate()));
         }
     }
 }
