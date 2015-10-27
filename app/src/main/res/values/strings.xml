@@ -3,6 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="gps_save_lbl">Save Zone</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_gps">GPS</string>
     <string name="lbl_btn_add_to_list">Add GPS</string>
@@ -31,6 +32,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="gps_selection_incorrect">You have no inputted any points. Please press on the map.</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_map_menu">MapMenuActivity</string>
     <string name="title_activity_zone_map">ZoneMapActivity</string>

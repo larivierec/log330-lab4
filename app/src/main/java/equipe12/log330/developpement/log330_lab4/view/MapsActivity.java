@@ -3,6 +3,9 @@ package equipe12.log330.developpement.log330_lab4.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,21 +23,29 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.LinkedList;
 
 import equipe12.log330.developpement.log330_lab4.R;
+import equipe12.log330.developpement.log330_lab4.database.DbFacade;
+import equipe12.log330.developpement.log330_lab4.model.GPS;
+import equipe12.log330.developpement.log330_lab4.model.Zone;
+import equipe12.log330.developpement.log330_lab4.model.ZonePoints;
+import equipe12.log330.developpement.log330_lab4.model.ZoneRadius;
+import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private GPS mGPS;
     private GoogleMap mMap;
     private GoogleMapOptions mMapOptions = new GoogleMapOptions();
-    private LinkedList<LatLng> mHardCodedList = new LinkedList<>();
     private LinkedList<LatLng> mUserSelections = new LinkedList<>();
+    private DbFacade database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        database = new DbFacade(CommonVariables.context);
 
-        mHardCodedList.push(new LatLng(45.501689, -73.567256)); //ets
-        mHardCodedList.push(new LatLng(55.00, -115)); //alberta
+        this.mGPS = (GPS) getIntent().getSerializableExtra("GPS");
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -52,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
 
         mMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL)
@@ -63,17 +74,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .zoomGesturesEnabled(true)
                 .mapToolbarEnabled(true);
 
-
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
+            public void onMapClick(LatLng latLng) {
+
                 mUserSelections.push(latLng);
-                if(mUserSelections.size() > 1 && mUserSelections.size() <= 2){
+                if (mUserSelections.size() == 1) {
+                    CircleOptions cOptions = new CircleOptions()
+                            .center(latLng)
+                            .fillColor(Color.GREEN)
+                            .radius(5000);
+                    Circle drawingRadius = mMap.addCircle(cOptions);
+                } else if (mUserSelections.size() == 2) {
+                    mMap.clear();
+
                     Polyline pLine = mMap.addPolyline(new PolylineOptions());
                     pLine.setPoints(mUserSelections);
                     pLine.setColor(Color.CYAN);
-                }
-                else if(mUserSelections.size() > 2){
+                } else if (mUserSelections.size() > 2) {
                     mMap.clear();
                     PolygonOptions pOptions = new PolygonOptions()
                             .strokeColor(Color.BLUE)
@@ -85,15 +103,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        // Add a marker in Sydney and move the camera
         LatLng montreal = new LatLng(45.5017, -73.5673);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
+    }
 
-        for(LatLng coord : mHardCodedList){
-            Circle circle = mMap.addCircle(new CircleOptions()
-                    .center(coord)
-                    .radius(50000)
-                    .strokeColor(Color.BLUE));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.gps_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.gps_save_zone) {
+            if(!mUserSelections.isEmpty()){
+                int numberOfPoints = mUserSelections.size();
+                Zone zoneToSave = null;
+
+                //create a circle
+                if(numberOfPoints == 1){
+                    zoneToSave = new ZoneRadius(-1, mGPS.getGPSName() + "_circlezone",
+                            true, mUserSelections.getFirst(), 5000);
+                }
+                else if(numberOfPoints >= 3){
+                    zoneToSave = new ZonePoints(-1, mGPS.getGPSName() + "_zone",
+                            true, mUserSelections);
+                }
+                if(zoneToSave != null)
+                    database.addZone(mGPS, zoneToSave);
+            }else{
+                Toast.makeText(getApplicationContext(),R.string.gps_selection_incorrect,Toast.LENGTH_LONG).show();
+            }
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

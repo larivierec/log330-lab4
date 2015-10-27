@@ -47,7 +47,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbFacade = new DbFacade(getBaseContext());
+        dbFacade = new DbFacade(CommonVariables.context);
         //create dummy coordinates
         // for adding GPS
         final Button gpsButton = (Button) findViewById(R.id.btn_add_gps);
@@ -123,7 +123,9 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     @Override
                     public void onClick(View v) {
                         gps_info_dialog.dismiss();
+                        GPS gpsToPass = mGPSList.get(position);
                         Intent mapsIntent = new Intent(mContext, MapsActivity.class);
+                        mapsIntent.putExtra("GPS", gpsToPass);
                         startActivity(mapsIntent);
                     }
                 });
