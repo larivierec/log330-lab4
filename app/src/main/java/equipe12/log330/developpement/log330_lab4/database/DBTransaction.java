@@ -140,9 +140,9 @@ class DBTransaction {
                 LinkedList<LatLng> points = zp.getPoints();
                 for(LatLng ll : points) {
                     ContentValues values1 = new ContentValues();
-                    values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT, ll.latitude);
-                    values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON, ll.longitude);
-                    values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE, newRowId);
+                    values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT, ll.latitude);
+                    values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON, ll.longitude);
+                    values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE, newRowId);
                     db.insertOrThrow(
                             FeedReaderContract.ZonePointFeedEntry.ZONE_POINT_TABLE_NAME,
                             null,
@@ -167,9 +167,9 @@ class DBTransaction {
                         values);
                 ContentValues values1 = new ContentValues();
                 LatLng mid = zr.getMiddle();
-                values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT, mid.latitude);
-                values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON, mid.longitude);
-                values.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE, newRowId);
+                values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT, mid.latitude);
+                values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON, mid.longitude);
+                values1.put(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_ID_ZONE, newRowId);
                 newRowId = db.insertOrThrow(
                         FeedReaderContract.ZonePointFeedEntry.ZONE_POINT_TABLE_NAME,
                         null,
