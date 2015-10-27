@@ -99,8 +99,8 @@ class DBTransaction {
                 if (zoneRadius == -1) {
                     while(!c2.isAfterLast()) {
                         LinkedList<LatLng> lst = new LinkedList<LatLng>();
-                        lst.add(new LatLng(c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
-                                c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))));
+                        lst.add(new LatLng(c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
+                                c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))));
                         zones.add(new ZonePoints(zoneId, zoneName, zoneActive, lst));
                         c2.moveToNext();
                     }
@@ -109,8 +109,8 @@ class DBTransaction {
                             zoneId,
                             zoneName,
                             zoneActive,
-                            new LatLng(c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
-                            c2.getDouble(c.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))),
+                            new LatLng(c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LAT)),
+                            c2.getDouble(c2.getColumnIndex(FeedReaderContract.ZonePointFeedEntry.COLUMN_NAME_LON))),
                             zoneRadius));
                 }
             }
