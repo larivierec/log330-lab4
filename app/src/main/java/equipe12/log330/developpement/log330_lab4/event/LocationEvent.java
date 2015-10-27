@@ -24,16 +24,6 @@ public class LocationEvent extends Observable implements Runnable {
         new Thread(this).start();
     }
 
-    public void setValue(int n) {
-        this.n = n;
-        setChanged();
-        notifyObservers();
-    }
-
-    public int getValue() {
-        return n;
-    }
-
     @Override
     public void run() {
         while (true) {
@@ -90,7 +80,7 @@ public class LocationEvent extends Observable implements Runnable {
                 }
             }
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
