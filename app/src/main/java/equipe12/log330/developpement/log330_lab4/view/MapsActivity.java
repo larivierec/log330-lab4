@@ -44,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         database = new DbFacade(CommonVariables.context);
 
-        this.mGPS = (GPS) getIntent().getSerializableExtra("equipe12.log330.developpement.log330_lab4");
+        this.mGPS = (GPS) getIntent().getSerializableExtra("GPS");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
