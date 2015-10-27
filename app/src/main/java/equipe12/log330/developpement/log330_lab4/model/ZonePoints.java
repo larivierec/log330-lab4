@@ -1,6 +1,11 @@
 package equipe12.log330.developpement.log330_lab4.model;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.LinkedList;
 
@@ -22,5 +27,14 @@ public class ZonePoints extends Zone {
 
     public void setPoints(LinkedList<LatLng> radius) {
         this.points = radius;
+    }
+
+    @Override
+    public void drawZone(GoogleMap map) {
+        PolygonOptions pOptions = new PolygonOptions()
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.GRAY);
+        pOptions.addAll(points);
+        Polygon poly = map.addPolygon(pOptions);
     }
 }

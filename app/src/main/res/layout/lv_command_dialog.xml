@@ -7,7 +7,7 @@
     <Button
         android:layout_width="222dp"
         android:layout_height="wrap_content"
-        android:text="@string/open_map_view"
+        android:text="@string/add_zone_to_gps"
         android:id="@+id/btn_open_maps_view"
         android:singleLine="true" />
 
@@ -16,6 +16,24 @@
         android:layout_height="wrap_content"
         android:text="@string/lbl_btn_remove_from_list"
         android:id="@+id/btn_delete_gps" />
+
+    <Button
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:text="Show Full Map"
+        android:id="@+id/btn_full_map" />
+
+    <Button
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:text="Show Zones"
+        android:id="@+id/btn_show_zones" />
+
+    <Button
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:text="Options"
+        android:id="@+id/btn_options" />
 
     <Button
         android:layout_width="225dp"

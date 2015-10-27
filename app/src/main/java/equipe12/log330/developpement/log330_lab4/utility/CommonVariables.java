@@ -2,6 +2,7 @@ package equipe12.log330.developpement.log330_lab4.utility;
 
 import android.content.Context;
 
+import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.User;
 
 /**
@@ -11,4 +12,5 @@ public class CommonVariables {
 
     public static User user;
     public static Context context;
+    public static GPS selectedGPS;
 }

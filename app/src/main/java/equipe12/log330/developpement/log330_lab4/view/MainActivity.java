@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 
 import equipe12.log330.developpement.log330_lab4.R;
-import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
 public class MainActivity extends Activity {
 
@@ -22,25 +21,7 @@ public class MainActivity extends Activity {
         final Button carteButton = (Button) findViewById(R.id.btnMap);
         final Button zoneButton = (Button) findViewById(R.id.btnListZone);
 
-        CommonVariables.context = getApplicationContext();
 
-        zoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this,
-                        MapMenuActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
-        carteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this,
-                        MapMenuActivity.class);
-                startActivity(myIntent);
-            }
-        });
 
         listGpsButton.setOnClickListener(new View.OnClickListener() {
             @Override

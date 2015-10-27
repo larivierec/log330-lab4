@@ -18,7 +18,7 @@
     <string name="add_message">Add</string>
     <string name="cancel_message">Cancel</string>
 
-    <string name="open_map_view">Open Map View</string>
+    <string name="add_zone_to_gps">Add Zone to GPS</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

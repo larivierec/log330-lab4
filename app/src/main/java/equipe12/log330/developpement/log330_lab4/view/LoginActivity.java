@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
                     CommonVariables.user = u;
                     ((TextView) findViewById(R.id.txtLoginError)).setVisibility(View.GONE);
                     Intent myIntent = new Intent(LoginActivity.this,
-                            MainActivity.class);
+                            GPSActivity.class);
                     startActivity(myIntent);
                 } else {
                     ((TextView) findViewById(R.id.txtLoginError)).setVisibility(View.VISIBLE);

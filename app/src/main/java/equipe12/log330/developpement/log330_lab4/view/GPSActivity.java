@@ -47,6 +47,8 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        CommonVariables.context = getApplicationContext();
+
         dbFacade = new DbFacade(CommonVariables.context);
         //create dummy coordinates
         // for adding GPS
@@ -106,9 +108,16 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                 final Dialog gps_info_dialog = new Dialog(mContext);
                 gps_info_dialog.setContentView(R.layout.lv_command_dialog);
                 gps_info_dialog.setTitle("GPS Commands");
+
                 final Button gps_remove = (Button) gps_info_dialog.findViewById(R.id.btn_delete_gps);
                 final Button map_mode = (Button) gps_info_dialog.findViewById(R.id.btn_open_maps_view);
                 final Button btn_cancel = (Button) gps_info_dialog.findViewById(R.id.btn_gps_info_cancel);
+                final Button btn_carte = (Button) gps_info_dialog.findViewById(R.id.btn_full_map);
+                final Button btn_zones = (Button) gps_info_dialog.findViewById(R.id.btn_show_zones);
+                final Button btn_options = (Button) gps_info_dialog.findViewById(R.id.btn_options);
+
+                //get the selected gps
+                CommonVariables.selectedGPS = mGPSList.get(position);
 
                 gps_remove.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,9 +132,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     @Override
                     public void onClick(View v) {
                         gps_info_dialog.dismiss();
-                        GPS gpsToPass = mGPSList.get(position);
                         Intent mapsIntent = new Intent(mContext, MapsActivity.class);
-                        mapsIntent.putExtra("GPS", gpsToPass);
                         startActivity(mapsIntent);
                     }
                 });
@@ -134,6 +141,24 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     @Override
                     public void onClick(View v) {
                         gps_info_dialog.cancel();
+                    }
+                });
+
+                btn_zones.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(GPSActivity.this,
+                                ZoneMapActivity.class);
+                        startActivity(myIntent);
+                    }
+                });
+
+                btn_carte.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(GPSActivity.this,
+                                MapMenuActivity.class);
+                        startActivity(myIntent);
                     }
                 });
 
