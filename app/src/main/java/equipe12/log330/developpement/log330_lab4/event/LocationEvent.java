@@ -1,7 +1,6 @@
 package equipe12.log330.developpement.log330_lab4.event;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
-import equipe12.log330.developpement.log330_lab4.database.DbFacade;
 import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.Zone;
 import equipe12.log330.developpement.log330_lab4.model.ZonePoints;
@@ -29,7 +27,7 @@ public class LocationEvent extends Observable implements Runnable {
 
     @Override
     public void run() {
-        Log.d("LOCATION_EVENT", "Thread" + n++);
+        //Log.d("LOCATION_EVENT", "Thread" + n++);
         double x = 0.0001;
         double y = 0.0001;
         double multiplierX = Math.random() < 0.5 ? -1 : 1;
@@ -41,15 +39,15 @@ public class LocationEvent extends Observable implements Runnable {
                 LinkedList<GPS> gpses = CommonVariables.dbFacade.getGps(CommonVariables.user);
                 for (GPS g : gpses) {
                     if(g != null) {
-                        Log.d("LOCATION_EVENT", "inside Gps : " + g.toString());
+                        //Log.d("LOCATION_EVENT", "inside Gps : " + g.toString());
                         LinkedList<Zone> zones = CommonVariables.dbFacade.getZones(g);
                         if (zones.size() > 0) {
                             Zone z = zones.get(0);
-                            Log.d("LOCATION_EVENT", "inside zone : " + z.toString());
+                            //Log.d("LOCATION_EVENT", "inside zone : " + z.toString());
                             setChanged();
                             if (z instanceof ZoneRadius) {
                                 LatLng mid = ((ZoneRadius) z).getMiddle();
-                                Log.d("LOCATION_EVENT", "X : " + x + " Y : " + y);
+                                //Log.d("LOCATION_EVENT", "X : " + x + " Y : " + y);
                                 LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
                                 CommonVariables.dbFacade.addCurrentPosition(g, newLL);
                                 if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000) && !wasOut.contains(g)) {
@@ -58,8 +56,8 @@ public class LocationEvent extends Observable implements Runnable {
                                     wasOut.add(g);
                                     notifyObservers(g);
                                 } else {
-                                    x += (0.0001 * multiplierX);
-                                    y += (0.0001 * multiplierY);
+                                    x += (0.01 * multiplierX);
+                                    y += (0.01 * multiplierY);
                                     wasOut.remove(g);
                                     notifyObservers(null);
                                 }
@@ -69,15 +67,15 @@ public class LocationEvent extends Observable implements Runnable {
                                     LatLng mid = points.get(0);
                                     LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
                                     CommonVariables.dbFacade.addCurrentPosition(g, newLL);
-                                    Log.d("LOCATION_EVENT", "Added : " + newLL.toString());
+                                    //Log.d("LOCATION_EVENT", "Added : " + newLL.toString());
                                     if (!isPointInPolygon(newLL, points) && !wasOut.contains(g)) {
                                         multiplierX = Math.random() < 0.5 ? -1 : 1;
                                         multiplierY = Math.random() < 0.5 ? -1 : 1;
                                         wasOut.add(g);
                                         notifyObservers(g);
                                     } else {
-                                        x += (0.0001 * multiplierX);
-                                        y += (0.0001 * multiplierY);
+                                        x += (0.01 * multiplierX);
+                                        y += (0.01 * multiplierY);
                                         wasOut.remove(g);
                                         notifyObservers(null);
                                     }
@@ -88,7 +86,7 @@ public class LocationEvent extends Observable implements Runnable {
                 }
             }
             try {
-                Thread.sleep(5000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

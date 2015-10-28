@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by serge on 2015-10-16.
+ * Modified by chris : 2015-10-25
  */
 public class ZoneRadius extends Zone {
 
@@ -43,7 +44,7 @@ public class ZoneRadius extends Zone {
     }
 
     @Override
-    public void drawZone(GoogleMap map) {
+    public void draw(GoogleMap map) {
         CircleOptions cOptions = new CircleOptions()
                 .center(middle)
                 .fillColor(Color.GREEN)

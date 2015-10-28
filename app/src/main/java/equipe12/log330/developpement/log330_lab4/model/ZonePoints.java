@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 /**
  * Created by serge on 2015-10-16.
+ * Modified by chris : 2015-10-25
  */
 public class ZonePoints extends Zone {
 
@@ -35,10 +36,9 @@ public class ZonePoints extends Zone {
     }
 
     @Override
-    public void drawZone(GoogleMap map) {
+    public void draw(GoogleMap map) {
         PolygonOptions pOptions = new PolygonOptions()
-                .strokeColor(Color.BLUE)
-                .fillColor(Color.GRAY);
+                .strokeColor(Color.BLUE);
         pOptions.addAll(points);
         Polygon poly = map.addPolygon(pOptions);
     }

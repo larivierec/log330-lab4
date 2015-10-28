@@ -25,7 +25,7 @@ public class ZoneMapActivity extends FragmentActivity implements OnMapReadyCallb
         mDatabaseConn = CommonVariables.dbFacade;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapMenu);
+                .findFragmentById(R.id.zoneMap);
         mapFragment.getMapAsync(this);
     }
 
@@ -33,7 +33,7 @@ public class ZoneMapActivity extends FragmentActivity implements OnMapReadyCallb
         mMap = map;
 
         for(Zone z : mDatabaseConn.getZones(CommonVariables.selectedGPS)){
-            z.drawZone(map);
+            z.draw(map);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(z.getFirstCoordinate()));
         }
     }

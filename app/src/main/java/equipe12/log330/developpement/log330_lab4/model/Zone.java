@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by serge on 2015-10-16.
+ * Modified by chris : 2015-10-25
  */
 public abstract class Zone {
 
@@ -38,7 +39,15 @@ public abstract class Zone {
         this.active = active;
     }
 
+    /**
+     *
+     * @return Latitude / Longitude coordinate
+     */
     public abstract LatLng getFirstCoordinate();
 
-    public abstract void drawZone(GoogleMap map);
+    /**
+     * Provides an extract method draw for its derivators
+     * @param map of type GoogleMap
+     */
+    public abstract void draw(GoogleMap map);
 }
