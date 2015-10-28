@@ -60,12 +60,15 @@ public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void update(Observable observable, Object data) {
         if(data != null && data instanceof GPS){
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(activity, "The GPS is out of its zone", Toast.LENGTH_SHORT).show();
-                }
-            });
+            GPS g = (GPS)data;
+            if(g.equals(CommonVariables.selectedGPS)) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, "The GPS is out of its zone", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
         activity.runOnUiThread(new Runnable() {
             @Override

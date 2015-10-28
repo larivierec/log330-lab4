@@ -52,4 +52,7 @@ public class DbFacade {
     public void addCurrentPosition(GPS gps, LatLng latLng) { dbTransaction.addCurrentPosition(gps ,latLng); }
 
     public LatLng getCurrentPosition(GPS gps) { return dbTransaction.getCurrentPosition(gps); }
+
+    public LinkedList<LatLng> getAllCurrentPositions(User user) { return dbTransaction.getAllCurrentPositions(user); }
+    
 }

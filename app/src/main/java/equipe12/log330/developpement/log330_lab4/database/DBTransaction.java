@@ -309,6 +309,15 @@ class DBTransaction {
         return null;
     }
 
+    public LinkedList<LatLng> getAllCurrentPositions(User user) {
+        LinkedList<GPS> gpses = getGps(user);
+        LinkedList<LatLng> positions = new LinkedList<LatLng>();
+        for(GPS g : gpses) {
+            positions.add(getCurrentPosition(g));
+        }
+        return positions;
+    }
+
     private String getDateTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
