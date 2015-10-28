@@ -38,7 +38,8 @@ public class ZonePoints extends Zone {
     @Override
     public void draw(GoogleMap map) {
         PolygonOptions pOptions = new PolygonOptions()
-                .strokeColor(Color.BLUE);
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.LTGRAY);
         pOptions.addAll(points);
         Polygon poly = map.addPolygon(pOptions);
     }

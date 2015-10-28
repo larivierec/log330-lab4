@@ -9,6 +9,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Observable;
@@ -23,6 +24,7 @@ import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
 
     private GoogleMap mMap;
+    private Marker mMarker;
     private DbFacade mDatabaseConn;
     private Activity activity;
 
@@ -52,6 +54,7 @@ public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(final GoogleMap map) {
         mMap = map;
         CommonVariables.locationEvent.addObserver(this);
+        createZonesAndMarkers();
     }
 
     @Override
@@ -67,25 +70,25 @@ public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallb
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                paintZonesAndGPS();
+                repositionGPS();
             }
         });
     }
 
-    private void paintZonesAndGPS(){
+    private void createZonesAndMarkers(){
         mMap.clear();
         for(Zone z : mDatabaseConn.getZones(CommonVariables.selectedGPS)){
             z.draw(mMap);
         }
-        paintGPS();
-    }
 
-    private void paintGPS() {
         LatLng ll = mDatabaseConn.getCurrentPosition(CommonVariables.selectedGPS);
         MarkerOptions mOptions = new MarkerOptions()
                 .position(ll)
                 .title("Current GPS Position");
-        //Log.d("MAP_MENU_ACTIVITY", "Current Loc : " + ll.toString());
-        mMap.addMarker(mOptions);
+        mMarker = mMap.addMarker(mOptions);
+    }
+
+    private void repositionGPS() {
+        mMarker.setPosition(mDatabaseConn.getCurrentPosition(CommonVariables.selectedGPS));
     }
 }
