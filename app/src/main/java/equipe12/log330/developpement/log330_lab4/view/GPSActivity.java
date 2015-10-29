@@ -113,6 +113,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                 final Button btn_carte = (Button) gps_info_dialog.findViewById(R.id.btn_full_map);
                 final Button btn_zones = (Button) gps_info_dialog.findViewById(R.id.btn_show_zones);
                 final Button btn_options = (Button) gps_info_dialog.findViewById(R.id.btn_options);
+                final Button btn_show_list_zones = (Button) gps_info_dialog.findViewById(R.id.btn_show_list_zones);
 
                 //get the selected gps
                 CommonVariables.selectedGPS = mGPSList.get(position);
@@ -156,6 +157,14 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     public void onClick(View v) {
                         Intent myIntent = new Intent(GPSActivity.this,
                                 MapMenuActivity.class);
+                        startActivity(myIntent);
+                    }
+                });
+                btn_show_list_zones.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(GPSActivity.this,
+                                ZoneListActivity.class);
                         startActivity(myIntent);
                     }
                 });

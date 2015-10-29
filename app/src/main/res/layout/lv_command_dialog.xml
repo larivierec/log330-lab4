@@ -28,6 +28,11 @@
         android:layout_height="wrap_content"
         android:text="Show Zones"
         android:id="@+id/btn_show_zones" />
+    <Button
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:text="Show list zones"
+        android:id="@+id/btn_show_list_zones" />
 
     <Button
         android:layout_width="225dp"
