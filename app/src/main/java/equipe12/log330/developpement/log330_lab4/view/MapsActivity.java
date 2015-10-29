@@ -3,6 +3,7 @@ package equipe12.log330.developpement.log330_lab4.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import equipe12.log330.developpement.log330_lab4.model.ZoneRadius;
 import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
+    private static final String TAG = MapsActivity.class.getSimpleName();
     private GPS mGPS;
     private GoogleMap mMap;
     private GoogleMapOptions mMapOptions = new GoogleMapOptions();
@@ -54,8 +55,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        mMap = googleMap;
 
+        mMap = googleMap;
+        Log.d(TAG,"onMapReady()" );
         mMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL)
                 .compassEnabled(true)
                 .rotateGesturesEnabled(true)
