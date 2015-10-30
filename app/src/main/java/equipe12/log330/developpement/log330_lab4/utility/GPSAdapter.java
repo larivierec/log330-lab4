@@ -23,7 +23,7 @@ public class GPSAdapter extends ArrayAdapter<GPS> {
     private LinkedList<GPS> mGPSItems;
 
     public GPSAdapter(Context ctx, LinkedList<GPS> items){
-        super(ctx, R.layout.gps_listview_layout,items);
+        super(ctx, R.layout.gps_list_view_item,items);
         this.mGPSItems = items;
     }
 
@@ -39,7 +39,7 @@ public class GPSAdapter extends ArrayAdapter<GPS> {
 
         if(row == null){
             LayoutInflater gpsInflater = LayoutInflater.from(getContext());
-            row = gpsInflater.inflate(R.layout.gps_listview_layout, parent, false);
+            row = gpsInflater.inflate(R.layout.gps_list_view_item, parent, false);
             vh = new GPSViewHolder(row);
             row.setTag(vh);
         }else{

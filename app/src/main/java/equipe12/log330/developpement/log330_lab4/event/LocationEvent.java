@@ -45,48 +45,71 @@ public class LocationEvent extends Observable implements Runnable {
                             Zone z = zones.get(0);
                             //Log.d("LOCATION_EVENT", "inside zone : " + z.toString());
                             setChanged();
-                            if (z instanceof ZoneRadius) {
-                                LatLng mid = ((ZoneRadius) z).getMiddle();
-                                //Log.d("LOCATION_EVENT", "X : " + x + " Y : " + y);
-                                LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
-                                CommonVariables.dbFacade.addCurrentPosition(g, newLL);
-                                if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000) && !wasOut.contains(g)) {
-                                    multiplierX = Math.random() < 0.5 ? -1 : 1;
-                                    multiplierY = Math.random() < 0.5 ? -1 : 1;
-                                    wasOut.add(g);
-                                    notifyObservers(g);
-                                } else {
-                                    x += (0.01 * multiplierX);
-                                    y += (0.01 * multiplierY);
-                                    wasOut.remove(g);
-                                    notifyObservers(null);
-                                }
-                            } else if (z instanceof ZonePoints) {
-                                LinkedList<LatLng> points = ((ZonePoints) z).getPoints();
-                                if (points.size() > 0) {
-                                    LatLng mid = points.get(0);
+                                if (z instanceof ZoneRadius) {
+                                    LatLng mid = ((ZoneRadius) z).getMiddle();
+                                    //Log.d("LOCATION_EVENT", "X : " + x + " Y : " + y);
                                     LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
                                     CommonVariables.dbFacade.addCurrentPosition(g, newLL);
-                                    //Log.d("LOCATION_EVENT", "Added : " + newLL.toString());
-                                    if (!isPointInPolygon(newLL, points) && !wasOut.contains(g)) {
-                                        multiplierX = Math.random() < 0.5 ? -1 : 1;
-                                        multiplierY = Math.random() < 0.5 ? -1 : 1;
-                                        wasOut.add(g);
-                                        notifyObservers(g);
+                                    if (distance(mid.latitude, mid.longitude, newLL.latitude, newLL.longitude) < (((ZoneRadius) z).getRadius() * 1000)) {
+                                        if (!wasOut.contains(g)) {
+                                            multiplierX = Math.random() < 0.5 ? -1 : 1;
+                                            multiplierY = Math.random() < 0.5 ? -1 : 1;
+                                            wasOut.add(g);
+                                            if (z.isActive()) {
+                                                notifyObservers(g);
+                                            } else {
+                                                notifyObservers(null);
+                                            }
+                                        } else {
+                                            x += (0.01 * multiplierX);
+                                            y += (0.01 * multiplierY);
+                                            notifyObservers(null);
+                                        }
                                     } else {
                                         x += (0.01 * multiplierX);
                                         y += (0.01 * multiplierY);
                                         wasOut.remove(g);
                                         notifyObservers(null);
                                     }
+                                } else if (z instanceof ZonePoints) {
+                                    LinkedList<LatLng> points = ((ZonePoints) z).getPoints();
+                                    if (points.size() > 0) {
+                                        LatLng mid = points.get(0);
+                                        LatLng newLL = new LatLng(mid.latitude + x, mid.longitude + y);
+                                        CommonVariables.dbFacade.addCurrentPosition(g, newLL);
+                                        //Log.d("LOCATION_EVENT", "Added : " + newLL.toString());
+                                        if (!isPointInPolygon(newLL, points)) {
+                                            if (!wasOut.contains(g)) {
+                                                multiplierX = Math.random() < 0.5 ? -1 : 1;
+                                                multiplierY = Math.random() < 0.5 ? -1 : 1;
+                                                wasOut.add(g);
+                                                if (z.isActive()) {
+                                                    notifyObservers(g);
+                                                } else {
+                                                    notifyObservers(null);
+                                                }
+                                            } else {
+                                                multiplierX = Math.random() < 0.5 ? -1 : 1;
+                                                multiplierY = Math.random() < 0.5 ? -1 : 1;
+                                                x += (0.01 * multiplierX);
+                                                y += (0.01 * multiplierY);
+                                                notifyObservers(null);
+                                            }
+                                        } else {
+                                            x += (0.01 * multiplierX);
+                                            y += (0.01 * multiplierY);
+                                            wasOut.remove(g);
+                                            notifyObservers(null);
+                                        }
+                                    }
                                 }
-                            }
+
                         }
                     }
                 }
             }
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

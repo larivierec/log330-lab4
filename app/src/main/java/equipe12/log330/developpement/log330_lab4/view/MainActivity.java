@@ -7,30 +7,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import equipe12.log330.developpement.log330_lab4.R;
+import equipe12.log330.developpement.log330_lab4.model.GPS;
+import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Observer {
+
+    private Activity activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.main_menu_view);
 
         final Button listGpsButton = (Button) findViewById(R.id.btnListGps);
         final Button carteButton = (Button) findViewById(R.id.btnMap);
-        final Button zoneButton = (Button) findViewById(R.id.btnListZone);
-
-
 
         listGpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this,
-                        GPSActivity.class);
+                        GPSListActivity.class);
                 startActivity(myIntent);
             }
         });
+
+        carteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        FullMapActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+        CommonVariables.locationEvent.addObserver(this);
     }
 
     @Override
@@ -42,16 +58,21 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void update(Observable observable, Object data) {
+        if(data != null && data instanceof GPS){
+            final GPS g = (GPS)data;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, g.getGPSName() + " est sorti de sa zone.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
 }

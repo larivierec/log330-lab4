@@ -264,18 +264,10 @@ class DBTransaction {
     public LinkedList<GPS> deleteGps(User user, GPS gps) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
-        String selection = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID_GPS + " LIKE ?";
-        String[] selectionArgs = { String.valueOf(gps.getGPSID()) };
-        db.delete(FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME, selection, selectionArgs);
-
-        selection = FeedReaderContract.GPSFeedEntry.COLUMN_NAME_ID + " LIKE ?";
-        String[] selectionArgs1 = { gps.getGPSID() };
-        db.delete(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME, selection, selectionArgs1);
-
-        selection = FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS + " LIKE ? and " +
+        String selection = FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS + " LIKE ? and " +
                 FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER + " = ?";
-        String[] selectionArgs2 = { gps.getGPSID(), String.valueOf(user.getId()) };
-        db.delete(FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME, selection, selectionArgs2);
+        String[] selectionArgs = { gps.getGPSID(), String.valueOf(user.getId()) };
+        db.delete(FeedReaderContract.UserGPSFeedEntry.USER_GPS_TABLE_NAME, selection, selectionArgs);
         return getGps(user);
     }
 
@@ -315,7 +307,10 @@ class DBTransaction {
         LinkedList<GPS> gpses = getGps(user);
         LinkedList<LatLng> positions = new LinkedList<LatLng>();
         for(GPS g : gpses) {
-            positions.add(getCurrentPosition(g));
+            LatLng ll = getCurrentPosition(g);
+            if(ll != null) {
+                positions.add(ll);
+            }
         }
         return positions;
     }

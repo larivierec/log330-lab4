@@ -24,12 +24,12 @@
             android:layout_height="wrap_content" android:orientation="vertical">
 
             <EditText android:id="@+id/userTxt" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:hint="Username"
+                android:layout_height="wrap_content" android:hint="Nom d'utilisateur"
                 android:inputType="none" android:maxLines="1"
                 android:singleLine="true" />
 
             <EditText android:id="@+id/passwordTxt" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:hint="Password"
+                android:layout_height="wrap_content" android:hint="Mot de passe"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"

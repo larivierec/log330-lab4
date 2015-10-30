@@ -21,7 +21,7 @@ public class ZoneMapActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zone_map);
+        setContentView(R.layout.zone_map_view);
         mDatabaseConn = CommonVariables.dbFacade;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

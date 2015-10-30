@@ -33,7 +33,7 @@ import equipe12.log330.developpement.log330_lab4.utility.GPSAdapter;
  * Uses the DialogGPSAccepted interface to add a new entity to the list
  */
 
-public class GPSActivity extends Activity implements DialogGPSAccepted {
+public class GPSListActivity extends Activity implements DialogGPSAccepted {
 
     final private Context mContext = this;
     private GPSAdapter mGPSAdapter;
@@ -45,7 +45,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.gps_list_view);
 
         dbFacade = CommonVariables.dbFacade;
         //create dummy coordinates
@@ -55,8 +55,8 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
             @Override
             public void onClick(View v) {
                 final Dialog gps_data_dialog = new Dialog(mContext);
-                gps_data_dialog.setContentView(R.layout.dialog_gps_layout);
-                gps_data_dialog.setTitle("Add a GPS");
+                gps_data_dialog.setContentView(R.layout.add_gps_dialog);
+                gps_data_dialog.setTitle("Ajouter Gps");
 
                 final Button dialogAdd = (Button) gps_data_dialog.findViewById(R.id.btn_add_gps_data);
                 final Button dialogCancel = (Button) gps_data_dialog.findViewById(R.id.btn_cancel_gps_data);
@@ -80,7 +80,7 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                         String gpsname = view_gpsname.getText().toString();
                         String gpsid = view_gpsid.getText().toString();
 
-                        GPSActivity.this.onDialogButtonAdded(gpsname, gpsid, null);
+                        GPSListActivity.this.onDialogButtonAdded(gpsname, gpsid, null);
                         gps_data_dialog.dismiss();
                     }
                 });
@@ -104,15 +104,12 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 final Dialog gps_info_dialog = new Dialog(mContext);
-                gps_info_dialog.setContentView(R.layout.lv_command_dialog);
-                gps_info_dialog.setTitle("GPS Commands");
+                gps_info_dialog.setContentView(R.layout.gps_command_dialog);
+                gps_info_dialog.setTitle("Commandes");
 
                 final Button gps_remove = (Button) gps_info_dialog.findViewById(R.id.btn_delete_gps);
                 final Button map_mode = (Button) gps_info_dialog.findViewById(R.id.btn_open_maps_view);
-                final Button btn_cancel = (Button) gps_info_dialog.findViewById(R.id.btn_gps_info_cancel);
-                final Button btn_carte = (Button) gps_info_dialog.findViewById(R.id.btn_full_map);
                 final Button btn_zones = (Button) gps_info_dialog.findViewById(R.id.btn_show_zones);
-                final Button btn_options = (Button) gps_info_dialog.findViewById(R.id.btn_options);
                 final Button btn_show_list_zones = (Button) gps_info_dialog.findViewById(R.id.btn_show_list_zones);
 
                 //get the selected gps
@@ -136,34 +133,19 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
                     }
                 });
 
-                btn_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gps_info_dialog.cancel();
-                    }
-                });
-
                 btn_zones.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent myIntent = new Intent(GPSActivity.this,
+                        Intent myIntent = new Intent(GPSListActivity.this,
                                 ZoneMapActivity.class);
                         startActivity(myIntent);
                     }
                 });
 
-                btn_carte.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent myIntent = new Intent(GPSActivity.this,
-                                MapMenuActivity.class);
-                        startActivity(myIntent);
-                    }
-                });
                 btn_show_list_zones.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent myIntent = new Intent(GPSActivity.this,
+                        Intent myIntent = new Intent(GPSListActivity.this,
                                 ZoneListActivity.class);
                         startActivity(myIntent);
                     }
@@ -184,16 +166,6 @@ public class GPSActivity extends Activity implements DialogGPSAccepted {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

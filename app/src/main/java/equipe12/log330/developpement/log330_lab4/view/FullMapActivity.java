@@ -12,6 +12,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,17 +24,18 @@ import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.Zone;
 import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
-public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
+public class FullMapActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
 
     private GoogleMap mMap;
-    private Marker mMarker;
+    List<Marker> markers = new ArrayList<Marker>();
+
     private DbFacade mDatabaseConn;
     private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_menu);
+        setContentView(R.layout.gps_map_view);
         mDatabaseConn = CommonVariables.dbFacade;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -60,15 +64,13 @@ public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void update(Observable observable, Object data) {
         if(data != null && data instanceof GPS){
-            GPS g = (GPS)data;
-            if(g.equals(CommonVariables.selectedGPS)) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity, "The GPS is out of its zone", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            final GPS g = (GPS)data;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, g.getGPSName() + " est sorti de sa zone.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -80,18 +82,34 @@ public class MapMenuActivity extends FragmentActivity implements OnMapReadyCallb
 
     private void createZonesAndMarkers(){
         mMap.clear();
-        for(Zone z : mDatabaseConn.getZones(CommonVariables.selectedGPS)){
-            z.draw(mMap);
+        LinkedList<GPS> gpses = mDatabaseConn.getGps(CommonVariables.user);
+        for(GPS gps : gpses) {
+            for (Zone z : mDatabaseConn.getZones(gps)) {
+                if(z.isActive()) {
+                    z.draw(mMap);
+                }
+            }
         }
 
-        LatLng ll = mDatabaseConn.getCurrentPosition(CommonVariables.selectedGPS);
-        MarkerOptions mOptions = new MarkerOptions()
-                .position(ll)
-                .title("Current GPS Position");
-        mMarker = mMap.addMarker(mOptions);
+        LinkedList<LatLng> lls = mDatabaseConn.getAllCurrentPositions(CommonVariables.user);
+        for(LatLng ll : lls) {
+            MarkerOptions mOptions = new MarkerOptions()
+                    .position(ll)
+                    .title("");
+            markers.add(mMap.addMarker(mOptions));
+        }
     }
 
     private void repositionGPS() {
-        mMarker.setPosition(mDatabaseConn.getCurrentPosition(CommonVariables.selectedGPS));
+        for(Marker m : markers) {
+            m.remove();
+        }
+        LinkedList<LatLng> lls = mDatabaseConn.getAllCurrentPositions(CommonVariables.user);
+        for(LatLng ll : lls) {
+            MarkerOptions mOptions = new MarkerOptions()
+                    .position(ll)
+                    .title("");
+            markers.add(mMap.addMarker(mOptions));
+        }
     }
 }

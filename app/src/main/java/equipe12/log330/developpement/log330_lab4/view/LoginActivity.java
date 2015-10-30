@@ -29,7 +29,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_view);
         CommonVariables.context = getApplicationContext();
         CommonVariables.dbFacade = new DbFacade(getApplicationContext());
         CommonVariables.locationEvent = new LocationEvent();
@@ -52,7 +52,7 @@ public class LoginActivity extends Activity {
                     CommonVariables.user = u;
                     ((TextView) findViewById(R.id.txtLoginError)).setVisibility(View.GONE);
                     Intent myIntent = new Intent(LoginActivity.this,
-                            GPSActivity.class);
+                            MainActivity.class);
                     startActivity(myIntent);
                 } else {
                     ((TextView) findViewById(R.id.txtLoginError)).setVisibility(View.VISIBLE);

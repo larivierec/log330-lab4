@@ -1,11 +1,15 @@
 package equipe12.log330.developpement.log330_lab4.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.map_create_zone_view);
         database = CommonVariables.dbFacade;
 
         this.mGPS = CommonVariables.selectedGPS;
@@ -112,20 +116,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (id == R.id.gps_save_zone) {
             if(!mUserSelections.isEmpty()){
                 int numberOfPoints = mUserSelections.size();
-                Zone zoneToSave = null;
-
                 //create a circle
                 if(numberOfPoints == 1){
-                    zoneToSave = new ZoneRadius(-1, mGPS.getGPSName() + "_circlezone",
-                            true, mUserSelections.getFirst(), 10000);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Sauvegarder Zone");
+
+                    final EditText name = new EditText(this);
+                    name.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(name);
+
+                    builder.setPositiveButton("Sauvegarder", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Zone zoneToSave = new ZoneRadius(-1, name.getText().toString(),
+                                    true, mUserSelections.getFirst(), 10000);
+                            database.addZone(mGPS, zoneToSave);
+                            resetView();
+                        }
+                    });
+                    builder.show();
                 }
                 else if(numberOfPoints >= 3){
-                    zoneToSave = new ZonePoints(-1, mGPS.getGPSName() + "_zone",
-                            true, mUserSelections);
-                }
-                if(zoneToSave != null) {
-                    database.addZone(mGPS, zoneToSave);
-                    resetView();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Sauvegarder Zone");
+
+                    final EditText name = new EditText(this);
+                    name.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(name);
+
+                    builder.setPositiveButton("Sauvegarder", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Zone zoneToSave = new ZonePoints(-1, name.getText().toString(),
+                                    true, mUserSelections);
+                            database.addZone(mGPS, zoneToSave);
+                            resetView();
+                        }
+                    });
+                    builder.show();
                 }
             }else{
                 Toast.makeText(getApplicationContext(),R.string.gps_selection_incorrect,Toast.LENGTH_LONG).show();

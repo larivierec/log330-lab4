@@ -15,15 +15,4 @@
         android:text="GPS"
         android:id="@+id/btnListGps" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Zone"
-        android:id="@+id/btnListZone" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Options"
-        android:id="@+id/btnSettings" />
 </LinearLayout>
