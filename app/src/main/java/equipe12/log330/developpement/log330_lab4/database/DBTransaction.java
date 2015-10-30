@@ -238,12 +238,14 @@ class DBTransaction {
             img.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
             values.put(FeedReaderContract.GPSFeedEntry.COLUMN_NAME_IMAGE, outputStream.toByteArray());
         }
+        try {
+            db.insertOrThrow(
+                    FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
+                    null,
+                    values);
+        } catch(Exception e) {
 
-        db.insertOrThrow(
-                FeedReaderContract.GPSFeedEntry.GPS_TABLE_NAME,
-                null,
-                values);
-
+        }
         ContentValues values1 = new ContentValues();
         values1.put(FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_GPS, gps.getGPSID());
         values1.put(FeedReaderContract.UserGPSFeedEntry.COLUMN_NAME_ID_USER, user.getId());
