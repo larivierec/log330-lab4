@@ -186,14 +186,19 @@ class DBTransaction {
     }
 
     public LinkedList<Zone> modifyZone(GPS gps, Zone zone) {
-        deleteZone(gps, zone);
-        return addZone(gps, zone);
+        //deleteZone(gps, zone);
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        String whereCondtion = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " = ?";
+        ContentValues cv = new ContentValues();
+        cv.put(FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ACTIVE, zone.isActive());
+        db.update(FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME, cv, whereCondtion, new String[]{String.valueOf(zone.getId())});
+        return getZones(gps);
     }
 
     public LinkedList<Zone> deleteZone(GPS gps, Zone zone) {
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
-        String selection = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " LIKE ?";
+        String selection = FeedReaderContract.ZoneFeedEntry.COLUMN_NAME_ID + " = ?";
         String[] selectionArgs = { String.valueOf(zone.getId()) };
         db.delete(FeedReaderContract.ZoneFeedEntry.ZONE_TABLE_NAME, selection, selectionArgs);
         return getZones(gps);

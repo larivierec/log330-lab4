@@ -61,12 +61,7 @@ public class ZoneListActivity extends Activity {
                 final Button zone_remove = (Button) zone_info_dialog.findViewById(R.id.btn_remove_zone);
                 final ToggleButton zone_toggle = (ToggleButton) zone_info_dialog.findViewById(R.id.btn_activate_zone);
 
-                boolean isActive = mZoneList.get(position).isActive();
-                if(isActive) {
-                    zone_toggle.setText("Désactiver");
-                } else {
-                    zone_toggle.setText("Activer");
-                }
+                zone_toggle.setChecked(mZoneList.get(position).isActive());
 
                 zone_remove.setOnClickListener(new View.OnClickListener() {
                     @Override
