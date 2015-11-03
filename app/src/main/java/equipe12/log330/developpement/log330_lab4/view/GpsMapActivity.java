@@ -21,7 +21,7 @@ import equipe12.log330.developpement.log330_lab4.model.GPS;
 import equipe12.log330.developpement.log330_lab4.model.Zone;
 import equipe12.log330.developpement.log330_lab4.utility.CommonVariables;
 
-public class GPSMapActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
+public class GpsMapActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
 
     private GoogleMap mMap;
     private Marker mMarker;
