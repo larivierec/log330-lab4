@@ -221,7 +221,7 @@ class DBTransaction {
             byte[] byteArray = c.getBlob(2);
             Bitmap img = null;
             if(byteArray != null) {
-                BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             }
             gps.add(new GPS(c.getString(0),
                     c.getString(1),
